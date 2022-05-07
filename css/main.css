@@ -203,7 +203,7 @@ a[onclick]:hover {
 .float-panel {
   position: sticky;
   right: 0;
-  bottom: 2rem;
+  bottom: 5rem;
   float: right;
   z-index: 10;
   display: flex;
