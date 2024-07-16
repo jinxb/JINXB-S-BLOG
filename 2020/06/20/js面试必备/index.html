@@ -18,24 +18,23 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" content="#f8f8f8">
-  <title>Javascript前端面试常见知识点 - Captain</title>
+  <title>Javascript前端常见知识点 - Captain</title>
 
   
 
   
-    <meta name="description" content="Javascript前端面试常考知识点(1)">
+    <meta name="description" content="Javascript 前端知识点(1)">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Javascript前端面试常见知识点">
+<meta property="og:title" content="Javascript前端常见知识点">
 <meta property="og:url" content="https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/index.html">
 <meta property="og:site_name" content="Captain">
-<meta property="og:description" content="Javascript前端面试常考知识点(1)">
+<meta property="og:description" content="Javascript 前端知识点(1)">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-20T05:15:43.000Z">
-<meta property="article:modified_time" content="2022-05-05T15:30:43.389Z">
+<meta property="article:modified_time" content="2024-07-16T07:51:59.571Z">
 <meta property="article:author" content="Jinxb">
 <meta property="article:tag" content="前端">
 <meta property="article:tag" content="JavaScript">
-<meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
   
   
@@ -74,7 +73,7 @@
 
 <div class="widgets">
 
-<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-text">一、变量类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85"><span class="toc-text">二、作用域和闭包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BC%82%E6%AD%A5"><span class="toc-text">三、异步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8E%9F%E5%9E%8B%E9%93%BE%E4%B8%8E%E7%BB%A7%E6%89%BF"><span class="toc-text">四、原型链与继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81DOM%E6%93%8D%E4%BD%9C%E4%B8%8EBOM%E6%93%8D%E4%BD%9C"><span class="toc-text">五、DOM操作与BOM操作</span></a></li></ol></div></div></div>
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-text">一、变量类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%9C%E7%94%A8%E5%9F%9F%E5%92%8C%E9%97%AD%E5%8C%85"><span class="toc-text">二、作用域和闭包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BC%82%E6%AD%A5"><span class="toc-text">三、异步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8E%9F%E5%9E%8B%E9%93%BE%E4%B8%8E%E7%BB%A7%E6%89%BF"><span class="toc-text">四、原型链与继承</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81DOM-%E6%93%8D%E4%BD%9C%E4%B8%8E-BOM-%E6%93%8D%E4%BD%9C"><span class="toc-text">五、DOM 操作与 BOM 操作</span></a></li></ol></div></div></div>
 
 
 </div>
@@ -89,13 +88,13 @@
 <div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="/categories/%E5%89%8D%E7%AB%AF/JavaScript/">JavaScript</a></div><div id="post-meta">发布于&nbsp;<time datetime="2020-06-20T05:15:43.000Z">2020-06-20</time></div></div>
 
 <article class='content md post'>
-<h1 class="article-title"><span>Javascript前端面试常见知识点</span></h1>
+<h1 class="article-title"><span>Javascript前端常见知识点</span></h1>
 <blockquote>
-<p>Javascript前端面试常考知识点(1)</p>
+<p>Javascript 前端知识点(1)</p>
 </blockquote>
-<span id="more"></span> 
+<span id="more"></span>
 
-<h2 id="一、变量类型"><a href="#一、变量类型" class="headerlink" title="一、变量类型"></a>一、变量类型</h2><h1 id="1-JS-的数据类型分类"><a href="#1-JS-的数据类型分类" class="headerlink" title="1.JS 的数据类型分类"></a>1.JS 的数据类型分类</h1><p>根据 JavaScript 中的变量类型传递方式，分为基本数据类型和引用数据类型。其中基本数据类型包括Undefined、Null、Boolean、Number、String、Symbol (ES6新增，表示独一无二的值)，而引用数据类型统称为Object对象，主要包括对象、数组和函数。在参数传递方式上，基本类型是按值传递，引用类型是按共享传递。</p>
+<h2 id="一、变量类型"><a href="#一、变量类型" class="headerlink" title="一、变量类型"></a>一、变量类型</h2><h1 id="1-JS-的数据类型分类"><a href="#1-JS-的数据类型分类" class="headerlink" title="1.JS 的数据类型分类"></a>1.JS 的数据类型分类</h1><p>根据 JavaScript 中的变量类型传递方式，分为基本数据类型和引用数据类型。其中基本数据类型包括 Undefined、Null、Boolean、Number、String、Symbol (ES6 新增，表示独一无二的值)，而引用数据类型统称为 Object 对象，主要包括对象、数组和函数。在参数传递方式上，基本类型是按值传递，引用类型是按共享传递。</p>
 <p>题目：基本类型和引用类型的区别</p>
 <p>基本类型和引用类型存储于内存的位置不同，基本类型直接存储在栈中,而引用类型的对象存储在堆中，与此同时，在栈中存储了指针，而这个指针指向正是堆中实体的起始位置。下面通过一个小题目，来看下两者的主要区别：</p>
 <p>&#x2F;&#x2F; 基本类型</p>
@@ -107,7 +106,7 @@ console.log(a)  // 10
 console.log(b)  // 20
 </code></pre>
 </blockquote>
-<p>上述代码中，a b都是值类型，两者分别修改赋值，相互之间没有任何影响。再看引用类型的例子：</p>
+<p>上述代码中，a b 都是值类型，两者分别修改赋值，相互之间没有任何影响。再看引用类型的例子：</p>
 <p>&#x2F;&#x2F; 引用类型</p>
 <blockquote>
 <pre><code>var a = &#123;x: 10, y: 20&#125;
@@ -118,8 +117,8 @@ console.log(a)  // &#123;x: 100, y: 200&#125;
 console.log(b)  // &#123;x: 100, y: 200&#125;
 </code></pre>
 </blockquote>
-<p>上述代码中，a b都是引用类型。在执行了b &#x3D; a之后，修改b的属性值，a的也跟着变化。因为a和b都是引用类型，指向了同一个内存地址，即两者引用的是同一个值，因此b修改属性时，a的值随之改动</p>
-<h1 id="2-数据类型的判断"><a href="#2-数据类型的判断" class="headerlink" title="2.数据类型的判断"></a>2.数据类型的判断</h1><p>1）typeof<br>typeof返回一个表示数据类型的字符串，返回结果包括：number、boolean、string、symbol、object、undefined、function等7种数据类型，但不能判断null、array等</p>
+<p>上述代码中，a b 都是引用类型。在执行了 b &#x3D; a 之后，修改 b 的属性值，a 的也跟着变化。因为 a 和 b 都是引用类型，指向了同一个内存地址，即两者引用的是同一个值，因此 b 修改属性时，a 的值随之改动</p>
+<h1 id="2-数据类型的判断"><a href="#2-数据类型的判断" class="headerlink" title="2.数据类型的判断"></a>2.数据类型的判断</h1><p>1）typeof<br>typeof 返回一个表示数据类型的字符串，返回结果包括：number、boolean、string、symbol、object、undefined、function 等 7 种数据类型，但不能判断 null、array 等</p>
 <blockquote>
 <pre><code>typeof Symbol(); // symbol 有效
 typeof &#39;&#39;; // string 有效
@@ -133,7 +132,7 @@ typeof new Date(); //object 无效
 typeof new RegExp(); //object 无效
 </code></pre>
 </blockquote>
-<p>2）instanceof<br>instanceof 是用来判断A是否为B的实例，表达式为：A instanceof B，如果A是B的实例，则返回true,否则返回false。instanceof 运算符用来测试一个对象在其原型链中是否存在一个构造函数的 prototype 属性，但它不能检测null 和 undefined</p>
+<p>2）instanceof<br>instanceof 是用来判断 A 是否为 B 的实例，表达式为：A instanceof B，如果 A 是 B 的实例，则返回 true,否则返回 false。instanceof 运算符用来测试一个对象在其原型链中是否存在一个构造函数的 prototype 属性，但它不能检测 null 和 undefined</p>
 <blockquote>
 <pre><code>[] instanceof Array; //true
 &#123;&#125; instanceof Object;//true
@@ -143,8 +142,8 @@ null instanceof Null//报错
 undefined instanceof undefined//报错
 </code></pre>
 </blockquote>
-<p>3）严格运算符&#x3D;&#x3D;&#x3D;<br>只能用于判断null和undefined，因为这两种类型的值都是唯一的。</p>
-<p>4）constructor<br>constructor作用和instanceof非常相似。但constructor检测 Object与instanceof不一样，还可以处理基本数据类型的检测。<br>不过函数的 constructor 是不稳定的，这个主要体现在把类的原型进行重写，在重写的过程中很有可能出现把之前的constructor给覆盖了，这样检测出来的结果就是不准确的。</p>
+<p>3）严格运算符&#x3D;&#x3D;&#x3D;<br>只能用于判断 null 和 undefined，因为这两种类型的值都是唯一的。</p>
+<p>4）constructor<br>constructor 作用和 instanceof 非常相似。但 constructor 检测 Object 与 instanceof 不一样，还可以处理基本数据类型的检测。<br>不过函数的 constructor 是不稳定的，这个主要体现在把类的原型进行重写，在重写的过程中很有可能出现把之前的 constructor 给覆盖了，这样检测出来的结果就是不准确的。</p>
 <p>5）Object.prototype.toString.call()</p>
 <blockquote>
 <pre><code>Object.prototype.toString.call() 是最准确最常用的方式。
@@ -169,7 +168,7 @@ Array.prototype.slice()
 </code></pre>
 <p>深拷贝就是在拷贝数据的时候，将数据的所有引用结构都拷贝一份。简单的说就是，在内存中存在两个数据结构完全相同又相互独立的数据，将引用型类型进行复制，而不是只复制其引用关系。</p>
 <p>深拷贝的实现方式：</p>
-<p>热门的函数库lodash，也有提供_.cloneDeep用来做深拷贝<br>jquery 提供一个$.extend可以用来做深拷贝<br>JSON.parse(JSON.stringify())<br>手写递归方法<br>递归实现深拷贝的原理：要拷贝一个数据，我们肯定要去遍历它的属性，如果这个对象的属性仍是对象，继续使用这个方法，如此往复。</p>
+<p>热门的函数库 lodash，也有提供_.cloneDeep 用来做深拷贝<br>jquery 提供一个$.extend 可以用来做深拷贝<br>JSON.parse(JSON.stringify())<br>手写递归方法<br>递归实现深拷贝的原理：要拷贝一个数据，我们肯定要去遍历它的属性，如果这个对象的属性仍是对象，继续使用这个方法，如此往复。</p>
 <blockquote>
 <pre><code>//定义检测数据类型的功能函数
 function checkedType(target) &#123;
@@ -208,24 +207,24 @@ function clone(target) &#123;
 </blockquote>
 <h2 id="二、作用域和闭包"><a href="#二、作用域和闭包" class="headerlink" title="二、作用域和闭包"></a>二、作用域和闭包</h2><h1 id="1-执行上下文和执行栈"><a href="#1-执行上下文和执行栈" class="headerlink" title="1.执行上下文和执行栈"></a>1.执行上下文和执行栈</h1><p>执行上下文就是当前 JavaScript 代码被解析和执行时所在环境的抽象概念， JavaScript 中运行任何的代码都是在执行上下文中运行。<br>执行上下文的生命周期包括三个阶段：创建阶段执行阶段回收阶段，我们重点介绍创建阶段。</p>
 <p>创建阶段（当函数被调用，但未执行任何其内部代码之前）会做以下三件事：</p>
-<p>创建变量对象：首先初始化函数的参数arguments，提升函数声明和变量声明。<br>创建作用域链：下文会介绍<br>确定this指向：下文会介绍</p>
+<p>创建变量对象：首先初始化函数的参数 arguments，提升函数声明和变量声明。<br>创建作用域链：下文会介绍<br>确定 this 指向：下文会介绍</p>
 <blockquote>
 <pre><code>function test(arg)&#123;
 // 1. 形参 arg 是 &quot;hi&quot;
 // 2. 因为函数声明比变量声明优先级高，所以此时 arg 是 function
-console.log(arg);  
+console.log(arg);
 var arg = &#39;hello&#39;; // 3.var arg 变量声明被忽略， arg = &#39;hello&#39;被执行
 function arg()&#123;
-console.log(&#39;hello world&#39;) 
+console.log(&#39;hello world&#39;)
 &#125;
-console.log(arg);  
+console.log(arg);
 &#125;
 test(&#39;hi&#39;);
 /* 输出：
 function arg() &#123;
 console.log(&#39;hello world&#39;);
 &#125;
-hello 
+hello
 */
 </code></pre>
 </blockquote>
@@ -233,8 +232,8 @@ hello
 <p>如果有形参，先给形参赋值<br>进行私有作用域中的预解释，函数声明优先级比变量声明高，最后后者会被前者所覆盖，但是可以重新赋值<br>私有作用域中的代码从上到下执行<br>函数多了，就有多个函数执行上下文，每次调用函数创建一个新的执行上下文，那如何管理创建的那么多执行上下文呢？</p>
 <p>JavaScript 引擎创建了执行栈来管理执行上下文。可以把执行栈认为是一个存储函数调用的栈结构，遵循先进后出的原则。</p>
 <p>从上面的流程图，我们需要记住几个关键点：</p>
-<p>JavaScript执行在单线程上，所有的代码都是排队执行。<br>一开始浏览器执行全局的代码时，首先创建全局的执行上下文，压入执行栈的顶部。<br>每当进入一个函数的执行就会创建函数的执行上下文，并且把它压入执行栈的顶部。当前函数执行完成后，当前函数的执行上下文出栈，并等待垃圾回收。<br>浏览器的JS执行引擎总是访问栈顶的执行上下文。<br>全局上下文只有唯一的一个，它在浏览器关闭时出栈。</p>
-<h1 id="2-作用域与作用域链"><a href="#2-作用域与作用域链" class="headerlink" title="2.作用域与作用域链"></a>2.作用域与作用域链</h1><p>ES6 到来JavaScript 有全局作用域、函数作用域和块级作用域（ES6新增）。我们可以这样理解：作用域就是一个独立的地盘，让变量不会外泄、暴露出去。也就是说作用域最大的用处就是隔离变量，不同作用域下同名变量不会有冲突。<br>在介绍作用域链之前，先要了解下自由变量，如下代码中，console.log(a)要得到a变量，但是在当前的作用域中没有定义a（可对比一下b）。当前作用域没有定义的变量，这成为 自由变量。</p>
+<p>JavaScript 执行在单线程上，所有的代码都是排队执行。<br>一开始浏览器执行全局的代码时，首先创建全局的执行上下文，压入执行栈的顶部。<br>每当进入一个函数的执行就会创建函数的执行上下文，并且把它压入执行栈的顶部。当前函数执行完成后，当前函数的执行上下文出栈，并等待垃圾回收。<br>浏览器的 JS 执行引擎总是访问栈顶的执行上下文。<br>全局上下文只有唯一的一个，它在浏览器关闭时出栈。</p>
+<h1 id="2-作用域与作用域链"><a href="#2-作用域与作用域链" class="headerlink" title="2.作用域与作用域链"></a>2.作用域与作用域链</h1><p>ES6 到来 JavaScript 有全局作用域、函数作用域和块级作用域（ES6 新增）。我们可以这样理解：作用域就是一个独立的地盘，让变量不会外泄、暴露出去。也就是说作用域最大的用处就是隔离变量，不同作用域下同名变量不会有冲突。<br>在介绍作用域链之前，先要了解下自由变量，如下代码中，console.log(a)要得到 a 变量，但是在当前的作用域中没有定义 a（可对比一下 b）。当前作用域没有定义的变量，这成为 自由变量。</p>
 <blockquote>
 <pre><code>var a = 100
 function fn() &#123;
@@ -261,10 +260,10 @@ var f1 = F1()
 F2(f1) // 100
 </code></pre>
 </blockquote>
-<p>上述代码中，自由变量a的值，从函数F1中查找而不是F2,这是因为当自由变量从作用域链中去寻找，依据的是函数定义时的作用域链，而不是函数执行时。</p>
-<h1 id="3-闭包是什么"><a href="#3-闭包是什么" class="headerlink" title="3.闭包是什么"></a>3.闭包是什么</h1><p>闭包这个概念也是JavaScript中比较抽象的概念，我个人理解，闭包是就是函数中的函数(其他语言不能这样),里面的函数可以访问外面函数的变量，外面的变量的是这个内部函数的一部分。</p>
+<p>上述代码中，自由变量 a 的值，从函数 F1 中查找而不是 F2,这是因为当自由变量从作用域链中去寻找，依据的是函数定义时的作用域链，而不是函数执行时。</p>
+<h1 id="3-闭包是什么"><a href="#3-闭包是什么" class="headerlink" title="3.闭包是什么"></a>3.闭包是什么</h1><p>闭包这个概念也是 JavaScript 中比较抽象的概念，我个人理解，闭包是就是函数中的函数(其他语言不能这样),里面的函数可以访问外面函数的变量，外面的变量的是这个内部函数的一部分。</p>
 <p>闭包的作用：</p>
-<p>使用闭包可以访问函数中的变量。<br>可以使变量长期保存在内存中，生命周期比较长。<br>闭包不能滥用，否则会导致内存泄露，影响网页的性能。闭包使用完了后，要立即释放资源，将引用变量指向null。</p>
+<p>使用闭包可以访问函数中的变量。<br>可以使变量长期保存在内存中，生命周期比较长。<br>闭包不能滥用，否则会导致内存泄露，影响网页的性能。闭包使用完了后，要立即释放资源，将引用变量指向 null。</p>
 <p>闭包主要有两个应用场景：</p>
 <p>函数作为参数传递（见作用域部分例子）<br>函数作为返回值（如下例）</p>
 <blockquote>
@@ -284,7 +283,7 @@ func2() // 输出1
 func2() // 输出2
 </code></pre>
 </blockquote>
-<h1 id="4-this全面解析"><a href="#4-this全面解析" class="headerlink" title="4.this全面解析"></a>4.this全面解析</h1><p>先搞明白一个很重要的概念 —— this的值是在执行的时候才能确认，定义的时候不能确认！ 为什么呢 —— 因为this是执行上下文环境的一部分，而执行上下文需要在代码执行之前确定，而不是定义的时候。看如下例子：</p>
+<h1 id="4-this-全面解析"><a href="#4-this-全面解析" class="headerlink" title="4.this 全面解析"></a>4.this 全面解析</h1><p>先搞明白一个很重要的概念 —— this 的值是在执行的时候才能确认，定义的时候不能确认！ 为什么呢 —— 因为 this 是执行上下文环境的一部分，而执行上下文需要在代码执行之前确定，而不是定义的时候。看如下例子：</p>
 <blockquote>
 <pre><code>// 情况1
 function foo() &#123;
@@ -318,7 +317,7 @@ add.apply(o, [10, 20]); // 1 + 3 + 10 + 20 = 34
 
 // 情况5
 &lt;button id=&quot;btn1&quot;&gt;箭头函数this&lt;/button&gt;
-&lt;script type=&quot;text/javascript&quot;&gt;   
+&lt;script type=&quot;text/javascript&quot;&gt;
     let btn1 = document.getElementById(&#39;btn1&#39;);
     let obj = &#123;
         name: &#39;kobe&#39;,
@@ -334,7 +333,7 @@ add.apply(o, [10, 20]); // 1 + 3 + 10 + 20 = 34
 </code></pre>
 </blockquote>
 <p>接下来我们逐一解释上面几种情况</p>
-<p>对于直接调用 foo 来说，不管 foo 函数被放在了什么地方，this 一定是 window<br>对于 obj.foo() 来说，我们只需要记住，谁调用了函数，谁就是 this，所以在这个场景下 foo 函数中的 this 就是 obj 对象<br>在构造函数模式中，类中(函数体中)出现的this.xxx&#x3D;xxx中的this是当前类的一个实例<br>call、apply和bind：this 是第一个参数<br>箭头函数this指向:箭头函数没有自己的this，看其外层的是否有函数，如果有，外层函数的this就是内部箭头函数的this，如果没有，则this是window。</p>
+<p>对于直接调用 foo 来说，不管 foo 函数被放在了什么地方，this 一定是 window<br>对于 obj.foo() 来说，我们只需要记住，谁调用了函数，谁就是 this，所以在这个场景下 foo 函数中的 this 就是 obj 对象<br>在构造函数模式中，类中(函数体中)出现的 this.xxx&#x3D;xxx 中的 this 是当前类的一个实例<br>call、apply 和 bind：this 是第一个参数<br>箭头函数 this 指向:箭头函数没有自己的 this，看其外层的是否有函数，如果有，外层函数的 this 就是内部箭头函数的 this，如果没有，则 this 是 window。</p>
 <h2 id="三、异步"><a href="#三、异步" class="headerlink" title="三、异步"></a>三、异步</h2><h1 id="1-同步-vs-异步"><a href="#1-同步-vs-异步" class="headerlink" title="1.同步 vs 异步"></a>1.同步 vs 异步</h1><p>同步，我的理解是一种线性执行的方式，执行的流程不能跨越。比如说话后在吃饭，吃完饭后在看手机，必须等待上一件事完了，才执行后面的事情。</p>
 <p>异步，是一种并行处理的方式，不必等待一个程序执行完，可以执行其它的任务。比方说一个人边吃饭，边看手机，边说话，就是异步处理的方式。在程序中异步处理的结果通常使用回调函数来处理结果。</p>
 <blockquote>
@@ -343,24 +342,24 @@ console.log(100)
 alert(200);
 console.log(300)  //100 200 300
 // 异步
-console.log(100) 
-setTimeout(function()&#123; 
-  console.log(200) 
-&#125;) 
+console.log(100)
+setTimeout(function()&#123;
+  console.log(200)
+&#125;)
 console.log(300) //100 300 200
 </code></pre>
 </blockquote>
-<h1 id="2-异步和单线程"><a href="#2-异步和单线程" class="headerlink" title="2.异步和单线程"></a>2.异步和单线程</h1><p>JS 需要异步的根本原因是 JS 是单线程运行的，即在同一时间只能做一件事，不能“一心二用”。为了利用多核CPU的计算能力，HTML5提出Web Worker标准，允许JavaScript脚本创建多个线程，但是子线程完全受主线程控制，且不得操作DOM。所以，这个新标准并没有改变JavaScript单线程的本质。</p>
+<h1 id="2-异步和单线程"><a href="#2-异步和单线程" class="headerlink" title="2.异步和单线程"></a>2.异步和单线程</h1><p>JS 需要异步的根本原因是 JS 是单线程运行的，即在同一时间只能做一件事，不能“一心二用”。为了利用多核 CPU 的计算能力，HTML5 提出 Web Worker 标准，允许 JavaScript 脚本创建多个线程，但是子线程完全受主线程控制，且不得操作 DOM。所以，这个新标准并没有改变 JavaScript 单线程的本质。</p>
 <p>一个 Ajax 请求由于网络比较慢，请求需要 5 秒钟。如果是同步，这 5 秒钟页面就卡死在这里啥也干不了了。异步的话，就好很多了，5 秒等待就等待了，其他事情不耽误做，至于那 5 秒钟等待是网速太慢，不是因为 JS 的原因。</p>
 <h1 id="3-前端异步的场景"><a href="#3-前端异步的场景" class="headerlink" title="3.前端异步的场景"></a>3.前端异步的场景</h1><p>前端使用异步的场景</p>
-<p>定时任务：setTimeout，setInterval<br>网络请求：ajax请求，动态加载<br>事件绑定</p>
+<p>定时任务：setTimeout，setInterval<br>网络请求：ajax 请求，动态加载<br>事件绑定</p>
 <h1 id="4-Event-Loop"><a href="#4-Event-Loop" class="headerlink" title="4.Event Loop"></a>4.Event Loop</h1><p>一个完整的 Event Loop 过程，可以概括为以下阶段：</p>
 <p>一开始执行栈空,我们可以把执行栈认为是一个存储函数调用的栈结构，遵循先进后出的原则。micro 队列空，macro 队列里有且只有一个 script 脚本（整体代码）。</p>
 <p>全局上下文（script 标签）被推入执行栈，同步代码执行。在执行的过程中，会判断是同步任务还是异步任务，通过对一些接口的调用，可以产生新的 macro-task 与 micro-task，它们会分别被推入各自的任务队列里。同步代码执行完了，script 脚本会被移出 macro 队列，这个过程本质上是队列的 macro-task 的执行和出队的过程。</p>
 <p>上一步我们出队的是一个 macro-task，这一步我们处理的是 micro-task。但需要注意的是：当 macro-task 出队时，任务是一个一个执行的；而 micro-task 出队时，任务是一队一队执行的。因此，我们处理 micro 队列这一步，会逐个执行队列中的任务并把它出队，直到队列被清空。<br>执行渲染操作，更新界面<br>检查是否存在 Web worker 任务，如果有，则对其进行处理<br>上述过程循环往复，直到两个队列都清空<br>接下来我们看道例子来介绍上面流程：</p>
 <blockquote>
 <pre><code>Promise.resolve().then(()=&gt;&#123;
-  console.log(&#39;Promise1&#39;)  
+  console.log(&#39;Promise1&#39;)
   setTimeout(()=&gt;&#123;
     console.log(&#39;setTimeout2&#39;)
   &#125;,0)
@@ -368,15 +367,15 @@ console.log(300) //100 300 200
 setTimeout(()=&gt;&#123;
   console.log(&#39;setTimeout1&#39;)
   Promise.resolve().then(()=&gt;&#123;
-    console.log(&#39;Promise2&#39;)    
+    console.log(&#39;Promise2&#39;)
   &#125;)
 &#125;,0)
 最后输出结果是Promise1，setTimeout1，Promise2，setTimeout2
 </code></pre>
 </blockquote>
-<p>一开始执行栈的同步任务（这属于宏任务）执行完毕，会去查看是否有微任务队列，上题中存在(有且只有一个)，然后执行微任务队列中的所有任务输出Promise1，同时会生成一个宏任务 setTimeout2<br>然后去查看宏任务队列，宏任务 setTimeout1 在 setTimeout2 之前，先执行宏任务 setTimeout1，输出 setTimeout1<br>在执行宏任务setTimeout1时会生成微任务Promise2 ，放入微任务队列中，接着先去清空微任务队列中的所有任务，输出 Promise2<br>清空完微任务队列中的所有任务后，就又会去宏任务队列取一个，这回执行的是 setTimeout2</p>
-<h2 id="四、原型链与继承"><a href="#四、原型链与继承" class="headerlink" title="四、原型链与继承"></a>四、原型链与继承</h2><h1 id="1-原型和原型链"><a href="#1-原型和原型链" class="headerlink" title="1.原型和原型链"></a>1.原型和原型链</h1><p>原型：在JavaScript中原型是一个prototype对象，用于表示类型之间的关系。</p>
-<p>原型链：JavaScript万物都是对象，对象和对象之间也有关系，并不是孤立存在的。对象之间的继承关系，在JavaScript中是通过prototype对象指向父类对象，直到指向Object对象为止，这样就形成了一个原型指向的链条，专业术语称之为原型链。</p>
+<p>一开始执行栈的同步任务（这属于宏任务）执行完毕，会去查看是否有微任务队列，上题中存在(有且只有一个)，然后执行微任务队列中的所有任务输出 Promise1，同时会生成一个宏任务 setTimeout2<br>然后去查看宏任务队列，宏任务 setTimeout1 在 setTimeout2 之前，先执行宏任务 setTimeout1，输出 setTimeout1<br>在执行宏任务 setTimeout1 时会生成微任务 Promise2 ，放入微任务队列中，接着先去清空微任务队列中的所有任务，输出 Promise2<br>清空完微任务队列中的所有任务后，就又会去宏任务队列取一个，这回执行的是 setTimeout2</p>
+<h2 id="四、原型链与继承"><a href="#四、原型链与继承" class="headerlink" title="四、原型链与继承"></a>四、原型链与继承</h2><h1 id="1-原型和原型链"><a href="#1-原型和原型链" class="headerlink" title="1.原型和原型链"></a>1.原型和原型链</h1><p>原型：在 JavaScript 中原型是一个 prototype 对象，用于表示类型之间的关系。</p>
+<p>原型链：JavaScript 万物都是对象，对象和对象之间也有关系，并不是孤立存在的。对象之间的继承关系，在 JavaScript 中是通过 prototype 对象指向父类对象，直到指向 Object 对象为止，这样就形成了一个原型指向的链条，专业术语称之为原型链。</p>
 <blockquote>
 <pre><code>var Person = function() &#123;
   this.age = 18
@@ -389,8 +388,8 @@ var s1 = new Student()
 console.log(s1)
 </code></pre>
 </blockquote>
-<p>当试图得到一个对象的某个属性时，如果这个对象本身没有这个属性，那么会去它的__proto__（即它的构造函数的prototype）中寻找。如果一直找到最上层都没有找到，那么就宣告失败，返回undefined。最上层是什么 —— Object.prototype.<strong>proto</strong> &#x3D;&#x3D;&#x3D; null</p>
-<h1 id="2-继承"><a href="#2-继承" class="headerlink" title="2.继承"></a>2.继承</h1><p>介绍几种常见继承方式（如需了解更多，请点击JavaScript常见的六种继承方式）：</p>
+<p>当试图得到一个对象的某个属性时，如果这个对象本身没有这个属性，那么会去它的<strong>proto</strong>（即它的构造函数的 prototype）中寻找。如果一直找到最上层都没有找到，那么就宣告失败，返回 undefined。最上层是什么 —— Object.prototype.<strong>proto</strong> &#x3D;&#x3D;&#x3D; null</p>
+<h1 id="2-继承"><a href="#2-继承" class="headerlink" title="2.继承"></a>2.继承</h1><p>介绍几种常见继承方式（如需了解更多，请点击 JavaScript 常见的六种继承方式）：</p>
 <p>原型链+借用构造函数的组合继承</p>
 <blockquote>
 <pre><code>function Parent(value) &#123;
@@ -435,7 +434,7 @@ child instanceof Parent // true
 </code></pre>
 </blockquote>
 <p>以上继承实现的核心就是将父类的原型赋值给了子类，并且将构造函数设置为子类，这样既解决了无用的父类属性问题，还能正确的找到子类的构造函数。</p>
-<p>ES6中class 的继承<br>ES6中引入了class关键字，class可以通过extends关键字实现继承，还可以通过static关键字定义类的静态方法,这比 ES5 的通过修改原型链实现继承，要清晰和方便很多。需要注意的是，class关键字只是原型的语法糖，JavaScript继承仍然是基于原型实现的。</p>
+<p>ES6 中 class 的继承<br>ES6 中引入了 class 关键字，class 可以通过 extends 关键字实现继承，还可以通过 static 关键字定义类的静态方法,这比 ES5 的通过修改原型链实现继承，要清晰和方便很多。需要注意的是，class 关键字只是原型的语法糖，JavaScript 继承仍然是基于原型实现的。</p>
 <blockquote>
 <pre><code>class Parent &#123;
   constructor(value) &#123;
@@ -457,7 +456,7 @@ child instanceof Parent // true
 class 实现继承的核心在于使用 extends 表明继承自哪个父类，并且在子类构造函数中必须调用 super，因为这段代码可以看成 Parent.call(this, value)。
 </code></pre>
 </blockquote>
-<h2 id="五、DOM操作与BOM操作"><a href="#五、DOM操作与BOM操作" class="headerlink" title="五、DOM操作与BOM操作"></a>五、DOM操作与BOM操作</h2><h1 id="1-DOM操作"><a href="#1-DOM操作" class="headerlink" title="1.DOM操作"></a>1.DOM操作</h1><p>当网页被加载时，浏览器会创建页面的文档对象模型(DOM),我们可以认为 DOM 就是 JS 能识别的 HTML 结构，一个普通的 JS 对象或者数组。接下来我们介绍常见DOM操作：</p>
+<h2 id="五、DOM-操作与-BOM-操作"><a href="#五、DOM-操作与-BOM-操作" class="headerlink" title="五、DOM 操作与 BOM 操作"></a>五、DOM 操作与 BOM 操作</h2><h1 id="1-DOM-操作"><a href="#1-DOM-操作" class="headerlink" title="1.DOM 操作"></a>1.DOM 操作</h1><p>当网页被加载时，浏览器会创建页面的文档对象模型(DOM),我们可以认为 DOM 就是 JS 能识别的 HTML 结构，一个普通的 JS 对象或者数组。接下来我们介绍常见 DOM 操作：</p>
 <blockquote>
 <pre><code>新增节点和移动节点
 var div1 = document.getElementById(&#39;div1&#39;)
@@ -480,12 +479,12 @@ var child = div1.childNodes
 div1.removeChild(child[0])
 </code></pre>
 </blockquote>
-<h1 id="2-DOM事件模型和事件流"><a href="#2-DOM事件模型和事件流" class="headerlink" title="2.DOM事件模型和事件流"></a>2.DOM事件模型和事件流</h1><p>DOM事件模型分为捕获和冒泡。一个事件发生后，会在子元素和父元素之间传播（propagation）。这种传播分成三个阶段。</p>
-<p>（1）捕获阶段：事件从window对象自上而下向目标节点传播的阶段；</p>
+<h1 id="2-DOM-事件模型和事件流"><a href="#2-DOM-事件模型和事件流" class="headerlink" title="2.DOM 事件模型和事件流"></a>2.DOM 事件模型和事件流</h1><p>DOM 事件模型分为捕获和冒泡。一个事件发生后，会在子元素和父元素之间传播（propagation）。这种传播分成三个阶段。</p>
+<p>（1）捕获阶段：事件从 window 对象自上而下向目标节点传播的阶段；</p>
 <p>（2）目标阶段：真正的目标节点正在处理事件的阶段；</p>
-<p>（3）冒泡阶段：事件从目标节点自下而上向window对象传播的阶段。</p>
-<p>DOM事件捕获的具体流程</p>
-<p>捕获是从上到下，事件先从window对象，然后再到document（对象），然后是html标签（通过document.documentElement获取html标签），然后是body标签（通过document.body获取body标签），然后按照普通的html结构一层一层往下传，最后到达目标元素。</p>
+<p>（3）冒泡阶段：事件从目标节点自下而上向 window 对象传播的阶段。</p>
+<p>DOM 事件捕获的具体流程</p>
+<p>捕获是从上到下，事件先从 window 对象，然后再到 document（对象），然后是 html 标签（通过 document.documentElement 获取 html 标签），然后是 body 标签（通过 document.body 获取 body 标签），然后按照普通的 html 结构一层一层往下传，最后到达目标元素。</p>
 <p>接下来我们看个事件冒泡的例子：</p>
 <blockquote>
 <pre><code>// 事件冒泡
@@ -514,7 +513,7 @@ inner.onclick = function(ev) &#123;
 </code></pre>
 </blockquote>
 <p>如何阻止冒泡？</p>
-<p>通过event.stopPropagation() 方法阻止事件冒泡到父元素，阻止任何父事件处理程序被执行。<br>我们可以在上例中inner元素的click事件上，添加event.stopPropagation()这句话后，就阻止了父事件的执行，最后只打印了’inner’。</p>
+<p>通过 event.stopPropagation() 方法阻止事件冒泡到父元素，阻止任何父事件处理程序被执行。<br>我们可以在上例中 inner 元素的 click 事件上，添加 event.stopPropagation()这句话后，就阻止了父事件的执行，最后只打印了’inner’。</p>
 <blockquote>
 <pre><code> inner.onclick = function(ev) &#123;
     console.log(&#39;inner&#39;)
@@ -534,7 +533,7 @@ inner.onclick = function(ev) &#123;
 &lt;button&gt;点击增加一个 a 标签&lt;/button&gt;
 </code></pre>
 </blockquote>
-<p>如果给每个<a>标签一一都绑定一个事件，那对于内存消耗是非常大的。借助事件代理，我们只需要给父容器div绑定方法即可，这样不管点击的是哪一个后代元素，都会根据冒泡传播的传递机制，把父容器的click行为触发，然后把对应的方法执行，根据事件源，我们可以知道点击的是谁，从而完成不同的事。</p>
+<p>如果给每个<a>标签一一都绑定一个事件，那对于内存消耗是非常大的。借助事件代理，我们只需要给父容器 div 绑定方法即可，这样不管点击的是哪一个后代元素，都会根据冒泡传播的传递机制，把父容器的 click 行为触发，然后把对应的方法执行，根据事件源，我们可以知道点击的是谁，从而完成不同的事。</p>
 <blockquote>
 <pre><code>var div1 = document.getElementById(&#39;div1&#39;)
 div1.addEventListener(&#39;click&#39;, function (e) &#123;
@@ -577,14 +576,14 @@ console.log(location.hash) // #some
 history.forward()
 </code></pre>
 </blockquote>
-<p>获取浏览器特性（即俗称的UA）然后识别客户端，例如判断是不是 Chrome 浏览器</p>
+<p>获取浏览器特性（即俗称的 UA）然后识别客户端，例如判断是不是 Chrome 浏览器</p>
 <blockquote>
 <pre><code>var ua = navigator.userAgent
 var isChrome = ua.indexOf(&#39;Chrome&#39;)
 console.log(isChrome)
 </code></pre>
 </blockquote>
-<h1 id="5-Ajax与跨域"><a href="#5-Ajax与跨域" class="headerlink" title="5.Ajax与跨域"></a>5.Ajax与跨域</h1><p>Ajax 是一种异步请求数据的一种技术，对于改善用户的体验和程序的性能很有帮助。<br>简单地说，在不需要重新刷新页面的情况下，Ajax 通过异步请求加载后台数据，并在网页上呈现出来。常见运用场景有表单验证是否登入成功、百度搜索下拉框提示和快递单号查询等等。Ajax的目的是提高用户体验，较少网络数据的传输量。</p>
+<h1 id="5-Ajax-与跨域"><a href="#5-Ajax-与跨域" class="headerlink" title="5.Ajax 与跨域"></a>5.Ajax 与跨域</h1><p>Ajax 是一种异步请求数据的一种技术，对于改善用户的体验和程序的性能很有帮助。<br>简单地说，在不需要重新刷新页面的情况下，Ajax 通过异步请求加载后台数据，并在网页上呈现出来。常见运用场景有表单验证是否登入成功、百度搜索下拉框提示和快递单号查询等等。Ajax 的目的是提高用户体验，较少网络数据的传输量。</p>
 <p>如何手写 XMLHttpRequest 不借助任何库</p>
 <blockquote>
 <pre><code>var xhr = new XMLHttpRequest()
@@ -604,19 +603,19 @@ xhr.send(null)
 <p>那么是出于什么安全考虑才会引入这种机制呢？ 其实主要是用来防止 CSRF 攻击的。简单点说，CSRF 攻击是利用用户的登录态发起恶意请求。</p>
 <p>然后我们来考虑一个问题，请求跨域了，那么请求到底发出去没有？ 请求必然是发出去了，但是浏览器拦截了响应。</p>
 <p>常见的几种跨域解决方案（具体如何实现详见九种跨域方式实现原理（完整版））：</p>
-<p>JSONP：利用同源策略对<script>标签不受限制,不过只支持GET请求<br>CORS：实现 CORS 通信的关键是后端，服务端设置 Access-Control-Allow-Origin 就可以开启，备受推崇的跨域解决方案，比 JSONP 简单许多<br>Node中间件代理或nginx反向代理：主要是通过同源策略对服务器不加限制</p>
+<p>JSONP：利用同源策略对<script>标签不受限制,不过只支持 GET 请求<br>CORS：实现 CORS 通信的关键是后端，服务端设置 Access-Control-Allow-Origin 就可以开启，备受推崇的跨域解决方案，比 JSONP 简单许多<br>Node 中间件代理或 nginx 反向代理：主要是通过同源策略对服务器不加限制</p>
 <h1 id="6-存储"><a href="#6-存储" class="headerlink" title="6.存储"></a>6.存储</h1><p>sessionStorage 、localStorage 和 cookie 之间的区别</p>
-<p>共同点：都是保存在浏览器端，且都遵循同源策略。<br>不同点：在于生命周期与作用域的不同<br>作用域：localStorage只要在相同的协议、相同的主机名、相同的端口下，就能读取/修改到同一份localStorage数据。sessionStorage比localStorage更严苛一点，除了协议、主机名、端口外，还要求在同一窗口（也就是浏览器的标签页）下</p>
+<p>共同点：都是保存在浏览器端，且都遵循同源策略。<br>不同点：在于生命周期与作用域的不同<br>作用域：localStorage 只要在相同的协议、相同的主机名、相同的端口下，就能读取/修改到同一份 localStorage 数据。sessionStorage 比 localStorage 更严苛一点，除了协议、主机名、端口外，还要求在同一窗口（也就是浏览器的标签页）下</p>
 <p>生命周期：localStorage 是持久化的本地存储，存储在其中的数据是永远不会过期的，使其消失的唯一办法是手动删除；而 sessionStorage 是临时性的本地存储，它是会话级别的存储，当会话结束（页面被关闭）时，存储内容也随之被释放。</p>
 <p>三者区别</p>
 <h2 id="六、模块化"><a href="#六、模块化" class="headerlink" title="六、模块化"></a>六、模块化</h2><p>几种常见模块化规范的简介（详情请点击前端模块化详解(完整版)）：</p>
-<p>CommonJS规范主要用于服务端编程，加载模块是同步的，这并不适合在浏览器环境，因为同步意味着阻塞加载，浏览器资源是异步加载的，因此有了AMD CMD解决方案<br>AMD规范在浏览器环境中异步加载模块，而且可以并行加载多个模块。不过，AMD规范开发成本高，代码的阅读和书写比较困难，模块定义方式的语义不顺畅。<br>CMD规范与AMD规范很相似，都用于浏览器编程，依赖就近，延迟执行，可以很容易在Node.js中运行。不过，依赖SPM 打包，模块的加载逻辑偏重<br>ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案</p>
+<p>CommonJS 规范主要用于服务端编程，加载模块是同步的，这并不适合在浏览器环境，因为同步意味着阻塞加载，浏览器资源是异步加载的，因此有了 AMD CMD 解决方案<br>AMD 规范在浏览器环境中异步加载模块，而且可以并行加载多个模块。不过，AMD 规范开发成本高，代码的阅读和书写比较困难，模块定义方式的语义不顺畅。<br>CMD 规范与 AMD 规范很相似，都用于浏览器编程，依赖就近，延迟执行，可以很容易在 Node.js 中运行。不过，依赖 SPM 打包，模块的加载逻辑偏重<br>ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案</p>
 
 
 <div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
-</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/&title=Javascript前端面试常见知识点 - Captain&summary=
-Javascript前端面试常考知识点(1)
-"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=Javascript前端面试常见知识点 - Captain&amp;body=https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/index.html"/></div></div></section></div>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/&title=Javascript前端常见知识点 - Captain&summary=
+Javascript 前端知识点(1)
+"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=Javascript前端常见知识点 - Captain&amp;body=https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://blog.kenym.cn/2020/06/20/js%E9%9D%A2%E8%AF%95%E5%BF%85%E5%A4%87/index.html"/></div></div></section></div>
 
 </article>
 

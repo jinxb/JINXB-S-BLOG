@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>【JavaScript核心】高阶函数 - Captain</title>
+
+  
+
+  
+    <meta name="description" content="高阶函数前言「JavaScript 中，函数是一等公民」，在各种书籍和文章中我们总能看到这句话。 通俗地解释就是：JS 中的函数也是对象，可以有属性，可以赋值给一个变量，可以放在数组里作为元素，可以作为其他对象的属性，普通对象能做的它能做，普通对象不能做的它也能做。 而所谓的高阶函数（Higher-order function），就是输入参数里有函数，或者输出是函数的函数。 最常见的高阶函数有 m">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【JavaScript核心】高阶函数">
+<meta property="og:url" content="https://blog.kenym.cn/2022/04/15/11_higher-order-function/index.html">
+<meta property="og:site_name" content="Captain">
+<meta property="og:description" content="高阶函数前言「JavaScript 中，函数是一等公民」，在各种书籍和文章中我们总能看到这句话。 通俗地解释就是：JS 中的函数也是对象，可以有属性，可以赋值给一个变量，可以放在数组里作为元素，可以作为其他对象的属性，普通对象能做的它能做，普通对象不能做的它也能做。 而所谓的高阶函数（Higher-order function），就是输入参数里有函数，或者输出是函数的函数。 最常见的高阶函数有 m">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-15T11:30:02.000Z">
+<meta property="article:modified_time" content="2024-07-16T05:56:16.978Z">
+<meta property="article:author" content="Jinxb">
+<meta property="article:tag" content="前端">
+<meta property="article:tag" content="JavaScript">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="https://kenym.cn/blog-resource/img/hp.jpeg">
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://kenym.cn/blog-resource/img/hp.jpeg" onerror="javascript:this.classList.add('error');this.src='https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Captain</div><div class="sub normal cap">与善者为伍,与智者同行。</div><div class="sub hover cap" style="opacity:0">生活就是苦中作乐</div></a></div>
+<nav class="menu dis-select"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">项目</a><a class="nav-item" href="/record/">笔记</a><a class="nav-item" href="/about/">更多</a></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="toc-text">柯里化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-text">应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%AE%9E%E7%8E%B0"><span class="toc-text">通用实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E4%B8%80%EF%BC%9A%E5%8F%82%E6%95%B0%E5%A4%8D%E7%94%A8"><span class="toc-text">应用一：参数复用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E4%BA%8C%EF%BC%9A%E5%85%BC%E5%AE%B9%E6%80%A7%E6%A3%80%E6%B5%8B"><span class="toc-text">应用二：兼容性检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E4%B8%89%EF%BC%9A%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA-add-%E5%87%BD%E6%95%B0"><span class="toc-text">应用三：实现一个 add 函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E6%9F%AF%E9%87%8C%E5%8C%96"><span class="toc-text">反柯里化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89-1"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E7%94%A8%E5%AE%9E%E7%8E%B0-1"><span class="toc-text">通用实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8C%BA%E5%88%AB"><span class="toc-text">区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%81%8F%E5%87%BD%E6%95%B0"><span class="toc-text">偏函数</span></a></li></ol></div></div></div>
+
+
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/jinxb" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/08a41b181ce68.svg"/></a><a class="social" href="/" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/3845874.svg"/></a><a class="social" href="/" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/3616429.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/942ebbf1a4b91.svg"/></a></div></footer>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%89%8D%E7%AB%AF/">前端</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="/categories/%E5%89%8D%E7%AB%AF/JavaScript/">JavaScript</a></div><div id="post-meta">发布于&nbsp;<time datetime="2022-04-15T11:30:02.000Z">2022-04-15</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>【JavaScript核心】高阶函数</span></h1>
+<h1 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>「JavaScript 中，函数是一等公民」，在各种书籍和文章中我们总能看到这句话。</p>
+<p>通俗地解释就是：JS 中的函数也是对象，可以有属性，可以赋值给一个变量，可以放在数组里作为元素，可以作为其他对象的属性，普通对象能做的它能做，普通对象不能做的它也能做。</p>
+<p>而所谓的高阶函数（Higher-order function），就是输入参数里有函数，或者输出是函数的函数。</p>
+<p>最常见的高阶函数有 <code>map()</code>、<code>reduce()</code>、<code>filter()</code>、<code>sort()</code>、<code>setTimeout</code>、<code>setInterval</code> 和 Ajax 请求，我们称之为回调函数，因为它将函数作为参数传递给另一个函数。</p>
+<p>另一个经常看到的高阶函数的场景是在一个函数内部输出另一个函数，比如闭包，还有接下来要讲的柯里化、反柯里化和偏函数。</p>
+<h2 id="柯里化"><a href="#柯里化" class="headerlink" title="柯里化"></a>柯里化</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><blockquote>
+<ul>
+<li>红宝书（第 3 版）：用于创建已经设置好了一个或多个参数的函数。基本方法是使用一个闭包返回一个函数。（P604）</li>
+<li>维基百科：柯里化（英语：Currying），是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9F%AF%E9%87%8C%E5%8C%96">原链接</a>）</li>
+<li>柯里化的原理就是利用闭包，可以形成一个不销毁的私有作用域，把预先处理的内容都存在这个不销毁的作用域里面，并且返回一个函数，以后要执行的就是这个函数。</li>
+</ul>
+</blockquote>
+<p>官方解释看得有点懵，大白话概括一下：</p>
+<p><strong>柯里化</strong>（Currying）又称部分求值（Partial Evaluation），是把接受多个参数的原函数变换成接受一个单一参数（原函数的第一个参数）的函数，并且返回一个新函数，新函数能够接受余下的参数，最后返回同原函数一样的结果。</p>
+<p>核心思想是把多参数传入的函数拆成单（或部分）参数函数，内部再返回调用下一个单（或部分）参数函数，依次处理剩余的参数。</p>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>柯里化有 3 个常见应用：</p>
+<ul>
+<li>参数复用 – 当在多次调用同一个函数，并且传递的参数绝大多数是相同的，那么该函数可能是一个很好的柯里化候选</li>
+<li>提前返回 – 多次调用多次内部判断，可以直接把第一次判断的结果返回外部接收</li>
+<li>延迟计算&#x2F;运行 – 避免重复的去执行程序，等真正需要结果的时候再执行</li>
+</ul>
+<h3 id="通用实现"><a href="#通用实现" class="headerlink" title="通用实现"></a>通用实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES5 方式</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">currying</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> rest1 = <span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">slice</span>.<span class="title function_">call</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">  rest1.<span class="title function_">shift</span>()</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> rest2 = <span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">slice</span>.<span class="title function_">call</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">    <span class="keyword">return</span> fn.<span class="title function_">apply</span>(<span class="literal">null</span>, rest1.<span class="title function_">concat</span>(rest2))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 方式</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">currying</span>(<span class="params">fn, ...rest1</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...rest2</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> fn.<span class="title function_">apply</span>(<span class="literal">null</span>, rest1.<span class="title function_">concat</span>(rest2))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>用它将一个 <code>sayHello</code> 函数柯里化试试：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接上面</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">sayHello</span>(<span class="params">name, age, fruit</span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`我叫 <span class="subst">$&#123;name&#125;</span>,我 <span class="subst">$&#123;age&#125;</span> 岁了, 我喜欢吃 <span class="subst">$&#123;fruit&#125;</span>`</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> curryingShowMsg1 = <span class="title function_">currying</span>(sayHello, <span class="string">&#x27;小明&#x27;</span>)</span><br><span class="line"><span class="title function_">curryingShowMsg1</span>(<span class="number">22</span>, <span class="string">&#x27;苹果&#x27;</span>) <span class="comment">// 输出: 我叫 小明,我 22 岁了, 我喜欢吃 苹果</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> curryingShowMsg2 = <span class="title function_">currying</span>(sayHello, <span class="string">&#x27;小衰&#x27;</span>, <span class="number">20</span>)</span><br><span class="line"><span class="title function_">curryingShowMsg2</span>(<span class="string">&#x27;西瓜&#x27;</span>) <span class="comment">// 输出: 我叫 小衰,我 20 岁了, 我喜欢吃 西瓜</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="应用一：参数复用"><a href="#应用一：参数复用" class="headerlink" title="应用一：参数复用"></a>应用一：参数复用</h3><p>如下名为 <code>uri</code> 的函数，接收 3 个参数，函数的作用是返回三个参数拼接的字符串。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">uri</span>(<span class="params">protocol, hostname, pathname</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;protocol&#125;</span><span class="subst">$&#123;hostname&#125;</span><span class="subst">$&#123;pathname&#125;</span>`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试一下</span></span><br><span class="line"><span class="keyword">const</span> uri1 = <span class="title function_">url</span>(<span class="string">&#x27;https://&#x27;</span>, <span class="string">&#x27;www.fedbook.cn&#x27;</span>, <span class="string">&#x27;/function-curring/&#x27;</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(uri1)</span><br></pre></td></tr></table></figure>
+
+<p>上面这种写法的弊端是：当我们有很多网址时，会导致非常多重复的参数（比如 <code>https://</code> 就是重复的参数，我们在浏览器里面输入网址也不需要输入 http 或者 https）。</p>
+<p>利用柯里化实现参数复用的思路：</p>
+<ul>
+<li>原函数（称为函数 A）只设置一个参数（接收协议这个参数）；</li>
+<li>在函数内部再创建一个函数（称为函数 B），函数 B 把刚才剩余的两个参数给补上，并返回字符串形式的 url；</li>
+<li>函数 A 返回函数 B。</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">uri_curring</span>(<span class="params">protocol</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">hostname, pathname</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;protocol&#125;</span><span class="subst">$&#123;hostname&#125;</span><span class="subst">$&#123;pathname&#125;</span>`</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试一下</span></span><br><span class="line"><span class="keyword">const</span> uri_https = <span class="title function_">uri_curring</span>(<span class="string">&#x27;https://&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> uri1 = <span class="title function_">uri_https</span>(</span><br><span class="line">  <span class="string">&#x27;www.fedbook.cn&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;/frontend-knowledge/javascript/function-currying/&#x27;</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">const</span> uri2 = <span class="title function_">uri_https</span>(</span><br><span class="line">  <span class="string">&#x27;www.fedbook.cn&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;/handwritten/javascript/10-实现bind方法/&#x27;</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">const</span> uri3 = <span class="title function_">uri_https</span>(<span class="string">&#x27;www.myblog.com&#x27;</span>, <span class="string">&#x27;/&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(uri1)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(uri2)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(uri3)</span><br></pre></td></tr></table></figure>
+
+<h3 id="应用二：兼容性检测"><a href="#应用二：兼容性检测" class="headerlink" title="应用二：兼容性检测"></a>应用二：兼容性检测</h3><p>::: warning<br>以下代码为了编写方便，会使用 ES6 的语法。实际生产环境中如果要做兼容性检测功能，需要转换成 ES5 语法。<br>:::</p>
+<p>因为浏览器的发展和各种原因，有些函数和方法是不被部分浏览器支持的，此时需要提前进行判断，从而确定用户的浏览器是否支持相应的方法。</p>
+<p>以事件监听为例，IE（IE9 之前） 支持的是 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener"><code>attachEvent</code></a> 方法，其它主流浏览器支持的是 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener"><code>addEventListener</code></a> 方法，我们需要创建一个新的函数来进行两者的判断。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> addEvent = <span class="keyword">function</span> (<span class="params">element, type, listener, useCapture</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">addEventListener</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;判断为其它浏览器&#x27;</span>)</span><br><span class="line">    <span class="comment">// 和原生 addEventListener 一样的函数</span></span><br><span class="line">    <span class="comment">// element: 需要添加事件监听的元素</span></span><br><span class="line">    <span class="comment">// type: 为元素添加什么类型的事件</span></span><br><span class="line">    <span class="comment">// listener: 执行的回调函数</span></span><br><span class="line">    <span class="comment">// useCapture: 要进行事件冒泡或者事件捕获的选择</span></span><br><span class="line">    element.<span class="title function_">addEventListener</span>(</span><br><span class="line">      type,</span><br><span class="line">      <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">        <span class="comment">// 为了规避 this 指向问题，用 call 进行 this 的绑定</span></span><br><span class="line">        listener.<span class="title function_">call</span>(element, e)</span><br><span class="line">      &#125;,</span><br><span class="line">      useCapture</span><br><span class="line">    )</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">attachEvent</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;判断为 IE9 以下浏览器&#x27;</span>)</span><br><span class="line">    <span class="comment">// 原生的 attachEvent 函数</span></span><br><span class="line">    <span class="comment">// 不需要第四个参数，因为 IE 支持的是事件冒泡</span></span><br><span class="line">    <span class="comment">// 多拼接一个 on，这样就可以使用统一书写形式的事件类型了</span></span><br><span class="line">    element.<span class="title function_">attachEvent</span>(<span class="string">&#x27;on&#x27;</span> + type, <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">      listener.<span class="title function_">call</span>(element, e)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试一下</span></span><br><span class="line"><span class="keyword">let</span> div = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> p = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> span = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;span&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEvent</span>(</span><br><span class="line">  div,</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;点击了 div&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="literal">true</span></span><br><span class="line">)</span><br><span class="line"><span class="title function_">addEvent</span>(</span><br><span class="line">  p,</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;点击了 p&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="literal">true</span></span><br><span class="line">)</span><br><span class="line"><span class="title function_">addEvent</span>(</span><br><span class="line">  span,</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;点击了 span&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>上面这种封装的弊端是：每次写监听事件的时候调用 <code>addEvent</code> 函数，都会进行 <code>if...else...</code> 的兼容性判断。事实上在代码中只需要执行一次兼容性判断就可以了，把根据一次判定之后的结果动态生成新的函数，以后就不必重新计算。</p>
+<p>那么怎么用函数柯里化优化这个封装函数？</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用立即执行函数，当我们把这个函数放在文件的头部，就可以先进行执行判断</span></span><br><span class="line"><span class="keyword">const</span> addEvent = (<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">addEventListener</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;判断为其它浏览器&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">element, type, listener, useCapture</span>) &#123;</span><br><span class="line">      element.<span class="title function_">addEventListener</span>(</span><br><span class="line">        type,</span><br><span class="line">        <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">          listener.<span class="title function_">call</span>(element, e)</span><br><span class="line">        &#125;,</span><br><span class="line">        useCapture</span><br><span class="line">      )</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">window</span>.<span class="property">attachEvent</span>) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;判断为 IE9 以下浏览器&#x27;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">element, type, handler</span>) &#123;</span><br><span class="line">      element.<span class="title function_">attachEvent</span>(<span class="string">&#x27;on&#x27;</span> + type, <span class="keyword">function</span> (<span class="params">e</span>) &#123;</span><br><span class="line">        handler.<span class="title function_">call</span>(element, e)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试一下</span></span><br><span class="line"><span class="keyword">let</span> div = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;div&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> p = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;p&#x27;</span>)</span><br><span class="line"><span class="keyword">let</span> span = <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;span&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="title function_">addEvent</span>(</span><br><span class="line">  div,</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;点击了 div&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="literal">true</span></span><br><span class="line">)</span><br><span class="line"><span class="title function_">addEvent</span>(</span><br><span class="line">  p,</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;点击了 p&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="literal">true</span></span><br><span class="line">)</span><br><span class="line"><span class="title function_">addEvent</span>(</span><br><span class="line">  span,</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;点击了 span&#x27;</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="literal">true</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>上述封装因为立即执行函数的原因，触发多次事件也依旧只会触发一次 if 条件判断。</p>
+<p>这里使用了函数柯里化的两个特点：提前返回和延迟执行。</p>
+<h3 id="应用三：实现一个-add-函数"><a href="#应用三：实现一个-add-函数" class="headerlink" title="应用三：实现一个 add 函数"></a>应用三：实现一个 add 函数</h3><p>这是一道经典面试题，要求我们实现一个 add 函数，可以实现以下计算结果：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">add</span>(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>) = <span class="number">6</span>;</span><br><span class="line"><span class="title function_">add</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)(<span class="number">4</span>) = <span class="number">10</span>;</span><br><span class="line"><span class="title function_">add</span>(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>)(<span class="number">4</span>)(<span class="number">5</span>) = <span class="number">15</span>;</span><br></pre></td></tr></table></figure>
+
+<p>通过这道题正好可以解释柯里化的延迟执行，直接上代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">add</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="comment">// 将传入的不定参数转为数组对象</span></span><br><span class="line">  <span class="keyword">let</span> args = <span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">slice</span>.<span class="title function_">call</span>(<span class="variable language_">arguments</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 递归：内部函数里面进行自己调用自己</span></span><br><span class="line">  <span class="comment">// 当 add 函数不断调用时，把第 N+1 个括号的参数加入到第 N 个括号的参数里面</span></span><br><span class="line">  <span class="keyword">let</span> inner = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    args.<span class="title function_">push</span>(...<span class="variable language_">arguments</span>)</span><br><span class="line">    <span class="keyword">return</span> inner</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  inner.<span class="property">toString</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// args 里的值不断累加</span></span><br><span class="line">    <span class="keyword">return</span> args.<span class="title function_">reduce</span>(<span class="keyword">function</span> (<span class="params">prev, cur</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> prev + cur</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> inner</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 测试一下</span></span><br><span class="line"><span class="keyword">let</span> result = <span class="title function_">add</span>(<span class="number">1</span>)(<span class="number">2</span>)(<span class="number">3</span>)(<span class="number">4</span>)</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result)</span><br></pre></td></tr></table></figure>
+
+<p>解释几个关键点：</p>
+<p><strong>1）不定参数 <code>arguments</code> 需要转为数组对象：</strong></p>
+<p>因为 <code>arguments</code> 并不是真正的数组，而是与数组类似对象，<code>Array.prototype.slice.call(arguments)</code> 能将具有 <code>length</code> 属性的对象转成数组。</p>
+<p><strong>2）<code>toString</code> 隐形转换的特性：</strong></p>
+<p>对于 <code>add(1)(2)(3)(4)</code>，执行每个括号的时候都返回 <code>inner</code> 函数，不断自己调用自己，每次内部函数返回的都是内部函数。</p>
+<p>如果打印函数执行的最终返回结果，可以发现返回了一个字符串（原本的函数被转换为字符串返回了），这即是发生了隐式转换，而发生隐式转换是因为调用了内部的 <code>toString</code> 方法。</p>
+<p>知道了这一点，我们就可以利用这个特性自定义返回的内容：重写 <code>inner</code> 函数的 <code>toString</code> 方法，在里面实现参数相加的执行代码。</p>
+<p>值得一提的是，这种处理后能够返回正确的累加结果，但返回的结果是个函数类型（<code>function</code>），这是因为我们在用递归返回函数，内部函数在被隐式转换为字符串之前本来就是一个函数。</p>
+<h2 id="反柯里化"><a href="#反柯里化" class="headerlink" title="反柯里化"></a>反柯里化</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>柯里化是固定部分参数，返回一个接受剩余参数的函数，也称为部分计算函数，目的是为了缩小适用范围，创建一个针对性更强的函数。核心思想是把多参数传入的函数拆成单参数（或部分）函数，内部再返回调用下一个单参数（或部分）函数，依次处理剩余的参数。</p>
+<p>而<strong>反柯里化</strong>，从字面讲，意义和用法跟函数柯里化相比正好相反，扩大适用范围，创建一个应用范围更广的函数。使本来只有特定对象才适用的方法，扩展到更多的对象。</p>
+<h3 id="通用实现-1"><a href="#通用实现-1" class="headerlink" title="通用实现"></a>通用实现</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES5 方式</span></span><br><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">unCurrying</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> self = <span class="variable language_">this</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> rest = <span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">slice</span>.<span class="title function_">call</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span>.<span class="title function_">apply</span>(self, rest)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 方式</span></span><br><span class="line"><span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">unCurrying</span> = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> self = <span class="variable language_">this</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...rest</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Function</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">call</span>.<span class="title function_">apply</span>(self, rest)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果觉得把函数放在 Function 的原型上不太好，也可以这样：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ES5 方式</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">unCurrying</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">tar</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> rest = <span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">slice</span>.<span class="title function_">call</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">    rest.<span class="title function_">shift</span>()</span><br><span class="line">    <span class="keyword">return</span> fn.<span class="title function_">apply</span>(tar, rest)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6 方式</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">unCurrying</span>(<span class="params">fn</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">tar, ...argu</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> fn.<span class="title function_">apply</span>(tar, argu)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面简单试用一下反柯里化通用实现，我们将 Array 上的 <code>push</code> 方法借出来给 arguments 这样的类数组增加一个元素：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 接上面</span></span><br><span class="line"><span class="keyword">var</span> push = <span class="title function_">unCurrying</span>(<span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">push</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">execPush</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title function_">push</span>(<span class="variable language_">arguments</span>, <span class="number">4</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="variable language_">arguments</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">execPush</span>(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="comment">// 输出: [1, 2, 3, 4]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h3><p>简单说，函数柯里化就是对高阶函数的降阶处理，缩小适用范围，创建一个针对性更强的函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>(<span class="params">arg1, arg2</span>)              <span class="comment">// =&gt; function(arg1)(arg2)</span></span><br><span class="line"><span class="keyword">function</span>(<span class="params">arg1, arg2, arg3</span>)        <span class="comment">// =&gt; function(arg1)(arg2)(arg3)</span></span><br><span class="line"><span class="keyword">function</span>(<span class="params">arg1, arg2, arg3, arg4</span>)  <span class="comment">// =&gt; function(arg1)(arg2)(arg3)(arg4)</span></span><br><span class="line"><span class="keyword">function</span>(<span class="params">arg1, arg2, ..., argn</span>)   <span class="comment">// =&gt; function(arg1)(arg2)…(argn)</span></span><br></pre></td></tr></table></figure>
+
+<p>而反柯里化就是反过来，增加适用范围，让方法使用场景更大。使用反柯里化，可以把原生方法借出来，让任何对象拥有原生对象的方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">obj.<span class="title function_">func</span>(arg1, arg2) <span class="comment">// =&gt; func(obj, arg1, arg2)</span></span><br></pre></td></tr></table></figure>
+
+<p>可以这样理解柯里化和反柯里化的区别：</p>
+<ul>
+<li>柯里化是在运算前提前传参，可以传递多个参数。</li>
+<li>反柯里化是延迟传参，在运算时把原来已经固定的参数或者 this 上下文等当作参数延迟到未来传递。</li>
+</ul>
+<h2 id="偏函数"><a href="#偏函数" class="headerlink" title="偏函数"></a>偏函数</h2><p>偏函数是创建一个调用另外一个部分（参数或变量已预制的函数）的函数，函数可以根据传入的参数来生成一个真正执行的函数。其本身不包括我们真正需要的逻辑代码，只是根据传入的参数返回其他的函数，返回的函数中才有真正的处理逻辑比如：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> isType = <span class="keyword">function</span> (<span class="params">type</span>) &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">obj</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">toString</span>.<span class="title function_">call</span>(obj) === <span class="string">`[object <span class="subst">$&#123;type&#125;</span>]`</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> isString = <span class="title function_">isType</span>(<span class="string">&#x27;String&#x27;</span>)</span><br><span class="line"><span class="keyword">var</span> isFunction = <span class="title function_">isType</span>(<span class="string">&#x27;Function&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样就用偏函数快速创建了一组判断对象类型的方法。</p>
+<p>偏函数和柯里化的区别：</p>
+<ul>
+<li><strong>柯里化</strong>是把一个接受 n 个参数的函数，由原本的一次性传递所有参数并执行变成了可以分多次接受参数再执行，例如：<code>add = (x, y, z) =&gt; x + y + z→curryAdd = x =&gt; y =&gt; z =&gt; x + y + z</code>。</li>
+<li><strong>偏函数</strong>固定了函数的某个部分，通过传入的参数或者方法返回一个新的函数来接受剩余的参数，数量可能是一个也可能是多个</li>
+</ul>
+<p>当一个柯里化函数只接受两次参数时，比如 <code>curry()()</code>，这时的柯里化函数和偏函数概念类似，可以认为偏函数是柯里化函数的退化版。</p>
+<p>（完）</p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://blog.kenym.cn/2022/04/15/11_higher-order-function/" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://blog.kenym.cn/2022/04/15/11_higher-order-function/&title=【JavaScript核心】高阶函数 - Captain&summary=高阶函数前言「JavaScript 中，函数是一等公民」，在各种书籍和文章中我们总能看到这句话。
+通俗地解释就是：JS 中的函数也是对象，可以有属性，可以赋值给一个变量，可以放在数组里作为元素，可以作为其他对象的属性，普通对象能做的它..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=【JavaScript核心】高阶函数 - Captain&amp;body=https://blog.kenym.cn/2022/04/15/11_higher-order-function/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://blog.kenym.cn/2022/04/15/11_higher-order-function/index.html"/></div></div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/2022/04/03/10_shallow-clone-and-deep-clone/">【JavaScript核心】浅克隆与深克隆<span class="note">较早</span></a><div class="line"></div><a id="prev" href="/2022/04/20/12_inheritance/">【JavaScript核心】实现继承<span class="note">较新</span></a></section></div>
+
+
+
+
+
+
+  <div class='related-wrap md reveal' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body beaudar'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="beaudar" repo="jinxb/blog-comments" issue-term="pathname" theme="preferred-color-scheme" input-position="top" comment-order="desc" loading="false" branch="main"></div>
+
+    </div>
+  </div>
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客主页</span><a href="/">主页</a></div><div class="sitemap-group"><span class="fs14">博客</span><a href="/">近期发布</a><a href="/categories/">分类</a><a href="/tags/">标签</a><a href="/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">Wiki</span><a href="/wiki/">开源项目</a></div><div class="sitemap-group"><span class="fs14">联系</span><a href="/about/">关于我</a><a target="_blank" rel="noopener" href="https://github.com/jinxb">GitHub</a></div></div><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://blog.kenym.cn/">@Jinxb</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.7.0" title="v1.7.0">Stellar</a> 作为主题。</p>
+Copyright <i class="far fa-copyright"></i> 2019-2022 丨 <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://www.kenym.cn/blog-resource/img/icp.png" style="margin-bottom:5px;vertical-align: middle;">  <a href="https://beian.miit.gov.cn" target="_blank">  鄂ICP备2022006222号  </a> 丨 <span id="timeDate">6 </span><span id="times"></span></div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.7.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function loadBeaudar() {
+    const els = document.querySelectorAll("#comments #beaudar");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.log(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://beaudar.lipk.org/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+      loadBeaudar();
+  });
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+  <!-- Chatra {literal} -->
+  <script>
+    (function(d, w, c) {
+        w.ChatraID = 'JwbPDuoaf3XEPfh8Y';
+        var s = d.createElement('script');
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        s.async = true;
+        s.src = 'https://call.chatra.io/chatra.js';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'Chatra');
+  </script>
+  <!-- /Chatra {/literal} -->
+</body>
+</html>

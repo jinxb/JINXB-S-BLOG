@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>Docker基础-常用命令 - Captain</title>
+
+  
+
+  
+    <meta name="description" content="常用命令一些 WEB 开发人员常用的 Docker 命令。 docker build该命令用于从 Dockerfile 构建 Docker image，Dockerfile 是一个包含构建镜像指令的脚本。 1234docker build -t [image_name] [dockerfile]# Docker 17.05 开始，官网为了更好地描述作用，对一些命令名称进行了调整docker ima">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker基础-常用命令">
+<meta property="og:url" content="https://blog.kenym.cn/2023/11/20/docker_00_common-commands/index.html">
+<meta property="og:site_name" content="Captain">
+<meta property="og:description" content="常用命令一些 WEB 开发人员常用的 Docker 命令。 docker build该命令用于从 Dockerfile 构建 Docker image，Dockerfile 是一个包含构建镜像指令的脚本。 1234docker build -t [image_name] [dockerfile]# Docker 17.05 开始，官网为了更好地描述作用，对一些命令名称进行了调整docker ima">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-20T08:30:02.000Z">
+<meta property="article:modified_time" content="2024-07-16T08:55:32.484Z">
+<meta property="article:author" content="Jinxb">
+<meta property="article:tag" content="工程化">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="https://kenym.cn/blog-resource/img/hp.jpeg">
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://kenym.cn/blog-resource/img/hp.jpeg" onerror="javascript:this.classList.add('error');this.src='https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Captain</div><div class="sub normal cap">与善者为伍,与智者同行。</div><div class="sub hover cap" style="opacity:0">生活就是苦中作乐</div></a></div>
+<nav class="menu dis-select"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">项目</a><a class="nav-item" href="/record/">笔记</a><a class="nav-item" href="/about/">更多</a></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-build"><span class="toc-text">docker build</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-images"><span class="toc-text">docker images</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-run"><span class="toc-text">docker run</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-ps"><span class="toc-text">docker ps</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-start-x2F-stop"><span class="toc-text">docker start&#x2F;stop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-logs"><span class="toc-text">docker logs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-exec"><span class="toc-text">docker exec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-login"><span class="toc-text">docker login</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-push"><span class="toc-text">docker push</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-pull"><span class="toc-text">docker pull</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95"><span class="toc-text">拓展</span></a></li></ol></div></div></div>
+
+
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/jinxb" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/08a41b181ce68.svg"/></a><a class="social" href="/" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/3845874.svg"/></a><a class="social" href="/" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/3616429.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/942ebbf1a4b91.svg"/></a></div></footer>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="/categories/%E5%B7%A5%E5%85%B7/%E5%B7%A5%E7%A8%8B%E5%8C%96/">工程化</a></div><div id="post-meta">发布于&nbsp;<time datetime="2023-11-20T08:30:02.000Z">2023-11-20</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>Docker基础-常用命令</span></h1>
+<h1 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h1><p>一些 WEB 开发人员常用的 Docker 命令。</p>
+<h2 id="docker-build"><a href="#docker-build" class="headerlink" title="docker build"></a>docker build</h2><p>该命令用于从 Dockerfile 构建 Docker image，Dockerfile 是一个包含构建镜像指令的脚本。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker build -t [image_name] [dockerfile]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Docker 17.05 开始，官网为了更好地描述作用，对一些命令名称进行了调整</span></span><br><span class="line">docker image build -t [image_name] [dockerfile]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>-t</code> 参数是 <code>-tag</code> 参数的缩写形式，允许镜像 <code>image</code> 指定名称和可选标签（冒号后面的部分），标签通常用于区分镜像的版本。</li>
+<li><code>image_name</code>：镜像名称。</li>
+<li><code>dockerfile</code>：<code>dockerfile</code> 文件，可以指定路径 <code>path/dockerfile</code>。</li>
+</ul>
+<h2 id="docker-images"><a href="#docker-images" class="headerlink" title="docker images"></a>docker images</h2><p>列出本地构建的所有 docker 镜像。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br><span class="line"><span class="comment"># 等同于</span></span><br><span class="line">docker image <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="docker-run"><a href="#docker-run" class="headerlink" title="docker run"></a>docker run</h2><p>后面指定的是一个镜像，通过这个命令可以利用镜像生成容器，并启动容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker run [options] [image_name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.13 版本之后推荐使用</span></span><br><span class="line">docker container run [options] [image_name]</span><br></pre></td></tr></table></figure>
+
+<p>这里要特别说一下 <code>docker run</code> 的 <code>option</code>，因为最常用：</p>
+<ul>
+<li><code>--name</code> 为容器指定一个名称，否则 Docker 会为其分配一个随机名称。</li>
+<li><code>-d</code> 容器启动后进入后台，并返回容器 ID，即启动守护式容器。</li>
+<li><code>-P</code> 随机端口映射。</li>
+<li><code>-p 80:8080</code> 将本地 80 端口映射到容器的 8080 端口。</li>
+<li><code>bash</code> 容器启动以后，内部第一个执行的命令。这里启动 bash，保证用户可以使用 Shell。</li>
+<li><code>-i</code> 以交互模式运行容器，通常与 <code>-t</code> 同时使用。</li>
+<li><code>-t</code> 为容器重新分配一个伪输入终端，容器的 Shell 会映射到当前的 Shell，然后在本机窗口输入的命令，就会传入容器，通常与 <code>-i</code> 同时使用。</li>
+<li><code>--rm</code> 在容器终止运行后自动删除容器文件。</li>
+<li><code>--restart=always</code> 设置容器自启动，这是一个重启策略，这个参数可以确保在 Docker 守护进程启动时，容器也会自动启动。</li>
+<li><code>-v /xxx:/yyy</code> 映射命令，把本机的 xxx 目录映射到容器中的 yyy 目录，也就是说改变本机的 xxx 目录下的内容，容器 yyy 目录中的内容也会改变。</li>
+</ul>
+<p>有时候，用后台模式启动一个容器 <code>docker run -d [image_name]</code> 后，用 <code>docker ps</code> 查看会发现容器并不在运行中。这是因为 Docker 的运行机制：<strong>Docker 容器后台运行，必须有一个前台进程</strong>。</p>
+<p>容器运行的命令如果不是那些一直挂起的命令，比如 <code>top</code>、<code>tail</code>，那么命令执行完毕容器会自动退出。所以为了让容器持续在后台运行，那么需要将运行的程序以前台进程的形式运行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 方法一：在后台运行一个命令，这个命令一直在打印：</span></span><br><span class="line">docker run -d --name [my_container_name] [image_name] /bin/bash -c <span class="string">&quot;while true; do echo hello world; sleep 3600; done&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 方法二：在运行命令中添加 -it 参数，这样容器就会以交互模式运行，即使没有前台进程，也不会退出</span></span><br><span class="line">docker run -dit --name [my_container_name] [image_name] /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>但是在生产环境中，我们通常会尽量避免使用死循环或者 <code>tail -f /dev/null</code> 这样的方法来保持容器运行，因为这些方法虽然可以解决问题，但是它们并不是最佳实践。这些方法可能会消耗额外的 CPU 资源，尤其是在大规模部署的情况下。</p>
+<p>在生产环境中，我们通常会让容器运行一个长期运行的进程，比如一个 Web 服务器或者一个数据库服务器。这样，只要这个进程在运行，容器就不会退出。</p>
+<h2 id="docker-ps"><a href="#docker-ps" class="headerlink" title="docker ps"></a>docker ps</h2><p>列出所有当前正在运行的容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker ps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1.13 版本之后推荐使用</span></span><br><span class="line">docker container ps</span><br></pre></td></tr></table></figure>
+
+<p>运行后可以看到列出所有运行的容器，包括容器 ID、名称 和 镜像名称。</p>
+<h2 id="docker-start-x2F-stop"><a href="#docker-start-x2F-stop" class="headerlink" title="docker start&#x2F;stop"></a>docker start&#x2F;stop</h2><p>后面指定的是一个容器，用于启动&#x2F;停止一个之前已经生成过的容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker start|stop [container_id]|[container_name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新版本推荐使用</span></span><br><span class="line">docker container start|stop [container_id]</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>一旦容器停止运行，它将不再出现在正在运行的容器列表中，通过 <code>docker ps</code> 是无法看到，需要列出不在运行的容器，可以使用命令 <code>docker ps -a</code>。</p>
+</blockquote>
+<h2 id="docker-logs"><a href="#docker-logs" class="headerlink" title="docker logs"></a>docker logs</h2><p>查看正在运行的容器的日志。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker logs [container_name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新版本推荐使用</span></span><br><span class="line">docker container logs [container_id]</span><br></pre></td></tr></table></figure>
+
+<p>此命令有助于调试容器中抛出的任何启动问题或异常。</p>
+<p>可选参数：</p>
+<ul>
+<li><code>--detail</code> 显示详细信息。</li>
+<li><code>-t</code> 针对每行日志添加时间戳。</li>
+<li><code>-f</code> 跟踪实时日志输出。</li>
+<li><code>--tail n</code> 输出倒数 N 行的日志。</li>
+</ul>
+<h2 id="docker-exec"><a href="#docker-exec" class="headerlink" title="docker exec"></a>docker exec</h2><p>通过此命令可以进入运行的容器中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker <span class="built_in">exec</span> -it [container_id]|[container_name] /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新版本推荐使用</span></span><br><span class="line">docker container <span class="built_in">exec</span> -it [container_id] /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>其中容器 ID 只要是能够证明唯一就可以，不用全输入。</p>
+<h2 id="docker-login"><a href="#docker-login" class="headerlink" title="docker login"></a>docker login</h2><p>为应用程序构建镜像并测试成功运行后，如果需要共享给其他人使用，就需要注册镜像仓库。</p>
+<p><a target="_blank" rel="noopener" href="https://hub.docker.com/">DockerHub</a> 是一个公共的镜像仓库，任何人都可以访问和下载存储在其中的镜像，除非用户将存储库设为私有。</p>
+<p>要登录到 DockerHub（假设有一个帐户），可以使用以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker login -u [username]</span><br></pre></td></tr></table></figure>
+
+<h2 id="docker-push"><a href="#docker-push" class="headerlink" title="docker push"></a>docker push</h2><p>该命令用于将镜像推送到 DockerHub。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker push [username]/[image_name]:[tag]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新版本推荐使用</span></span><br><span class="line">docker image push [username]/[repository]:[tag]</span><br></pre></td></tr></table></figure>
+
+<p>跟 GitHub 的使用方式类似。</p>
+<p>构建 Docker 镜像时的标准约定是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker build -t [username]/[image_name]:[tag_name]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新版本推荐使用</span></span><br><span class="line">docker image build -t [username]/[image_name]:[tag_name]</span><br></pre></td></tr></table></figure>
+
+<p>例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t test-user/vue3:v1</span><br></pre></td></tr></table></figure>
+
+<p>DockerHub 会在 <code>test-user</code> 用户下，自动将名为 <code>vue3</code> 的镜像标记为 <code>v1</code>。</p>
+<h2 id="docker-pull"><a href="#docker-pull" class="headerlink" title="docker pull"></a>docker pull</h2><p>登录到 DockerHub 后，可以使用这个命令拉取现有镜像：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各版本都可用</span></span><br><span class="line">docker pull test-user/vue3:v1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 新版本推荐使用</span></span><br><span class="line">docker image pull test-user/vue3:v1</span><br></pre></td></tr></table></figure>
+
+<h2 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h2><p>推荐一个文档：<a target="_blank" rel="noopener" href="https://docker.easydoc.net/doc/81170005/cCewZWoN/lTKfePfP">Docker 简介和安装 - Docker 快速入门</a></p>
+<p>（完）</p>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://blog.kenym.cn/2023/11/20/docker_00_common-commands/" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://blog.kenym.cn/2023/11/20/docker_00_common-commands/&title=Docker基础-常用命令 - Captain&summary=常用命令一些 WEB 开发人员常用的 Docker 命令。
+docker build该命令用于从 Dockerfile 构建 Docker image，Dockerfile 是一个包含构建镜像指令的脚本。
+1234docker bui..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=Docker基础-常用命令 - Captain&amp;body=https://blog.kenym.cn/2023/11/20/docker_00_common-commands/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://blog.kenym.cn/2023/11/20/docker_00_common-commands/index.html"/></div></div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/2022/12/14/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88_01_git-hooks/">Git Hooks 工程化实践<span class="note">较早</span></a><div class="line"></div></section></div>
+
+
+
+
+
+
+  <div class='related-wrap md reveal' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body beaudar'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="beaudar" repo="jinxb/blog-comments" issue-term="pathname" theme="preferred-color-scheme" input-position="top" comment-order="desc" loading="false" branch="main"></div>
+
+    </div>
+  </div>
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客主页</span><a href="/">主页</a></div><div class="sitemap-group"><span class="fs14">博客</span><a href="/">近期发布</a><a href="/categories/">分类</a><a href="/tags/">标签</a><a href="/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">Wiki</span><a href="/wiki/">开源项目</a></div><div class="sitemap-group"><span class="fs14">联系</span><a href="/about/">关于我</a><a target="_blank" rel="noopener" href="https://github.com/jinxb">GitHub</a></div></div><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://blog.kenym.cn/">@Jinxb</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.7.0" title="v1.7.0">Stellar</a> 作为主题。</p>
+Copyright <i class="far fa-copyright"></i> 2019-2022 丨 <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://www.kenym.cn/blog-resource/img/icp.png" style="margin-bottom:5px;vertical-align: middle;">  <a href="https://beian.miit.gov.cn" target="_blank">  鄂ICP备2022006222号  </a> 丨 <span id="timeDate">6 </span><span id="times"></span></div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.7.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function loadBeaudar() {
+    const els = document.querySelectorAll("#comments #beaudar");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.log(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://beaudar.lipk.org/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+      loadBeaudar();
+  });
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+  <!-- Chatra {literal} -->
+  <script>
+    (function(d, w, c) {
+        w.ChatraID = 'JwbPDuoaf3XEPfh8Y';
+        var s = d.createElement('script');
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        s.async = true;
+        s.src = 'https://call.chatra.io/chatra.js';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'Chatra');
+  </script>
+  <!-- /Chatra {/literal} -->
+</body>
+</html>
