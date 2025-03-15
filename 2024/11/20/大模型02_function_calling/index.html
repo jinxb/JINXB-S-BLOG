@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang='zh-CN'>
+
+<head>
+  <meta name="generator" content="Hexo 5.4.0">
+  <meta charset="utf-8">
+  
+
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  <link rel='dns-prefetch' href='https://cdn.jsdelivr.net'>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel='dns-prefetch' href='//unpkg.com'>
+
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#f8f8f8">
+  <title>大模型结构化输出 - Captain</title>
+
+  
+
+  
+    <meta name="description" content="结构化输出结构化输出（Structured Outputs）是指让 LLM 输出符合机器可解析的格式，这对于构建 AI 应用至关重要。 技术路径JSON modeJSON Mode 是大模型生成结构化输出的一种方式，通过特定的提示（Prompt Engineering）让大模型输出符合 JSON 格式的数据。关键点：  结构化输出：JSON Mode 确保大模型的输出是结构化的，符合 JSON 格">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大模型结构化输出">
+<meta property="og:url" content="https://blog.kenym.cn/2024/11/20/%E5%A4%A7%E6%A8%A1%E5%9E%8B02_function_calling/index.html">
+<meta property="og:site_name" content="Captain">
+<meta property="og:description" content="结构化输出结构化输出（Structured Outputs）是指让 LLM 输出符合机器可解析的格式，这对于构建 AI 应用至关重要。 技术路径JSON modeJSON Mode 是大模型生成结构化输出的一种方式，通过特定的提示（Prompt Engineering）让大模型输出符合 JSON 格式的数据。关键点：  结构化输出：JSON Mode 确保大模型的输出是结构化的，符合 JSON 格">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-20T11:12:11.000Z">
+<meta property="article:modified_time" content="2025-03-15T17:06:24.234Z">
+<meta property="article:author" content="Jinxb">
+<meta property="article:tag" content="AI">
+<meta property="article:tag" content="大模型">
+<meta name="twitter:card" content="summary">
+  
+  
+
+  <!-- feed -->
+  
+
+  
+    
+<link rel="stylesheet" href="/css/main.css">
+
+  
+
+  
+    <link rel="shortcut icon" href="https://kenym.cn/blog-resource/img/hp.jpeg">
+  
+
+  
+</head>
+
+<body>
+  
+
+
+
+
+  <div class='l_body' id='start'>
+    <aside class='l_left' layout='post'>
+    
+
+
+<header class="header">
+
+<div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.2/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="https://kenym.cn/blog-resource/img/hp.jpeg" onerror="javascript:this.classList.add('error');this.src='https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/image/2659360.svg';"></a><a class="title" href="/"><div class="main">Captain</div><div class="sub normal cap">与善者为伍,与智者同行。</div><div class="sub hover cap" style="opacity:0">生活就是苦中作乐</div></a></div>
+<nav class="menu dis-select"><a class="nav-item active" href="/">文章</a><a class="nav-item" href="/wiki/">项目</a><a class="nav-item" href="/record/">笔记</a><a class="nav-item" href="/about/">更多</a></nav></header>
+
+<div class="widgets">
+
+<div class="widget-wrap single" id="toc"><div class="widget-header cap dis-select"><span class="name">本文目录</span></div><div class="widget-body fs14"><div class="doc-tree active"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84%E5%8C%96%E8%BE%93%E5%87%BA"><span class="toc-text">结构化输出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E8%B7%AF%E5%BE%84"><span class="toc-text">技术路径</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON-mode"><span class="toc-text">JSON mode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%EF%BC%88Function-Calling%EF%BC%89"><span class="toc-text">函数调用（Function Calling）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89"><span class="toc-text">1. 接口定义</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="toc-text">2. 调用流程</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-text">3. 示例代码</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JSON-Schema"><span class="toc-text">JSON Schema</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-JSON-Schema-%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%A4%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E8%BE%93%E5%87%BA"><span class="toc-text">示例：使用 JSON Schema 格式化大模型的输出</span></a></li></ol></li></ol></li></ol></li></ol></div></div></div>
+
+
+</div>
+<footer class="footer dis-select"><div class="social-wrap"><a class="social" href="https://github.com/jinxb" target="_blank" rel="external nofollow noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/08a41b181ce68.svg"/></a><a class="social" href="/" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/3845874.svg"/></a><a class="social" href="/" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/3616429.svg"/></a><a class="social" href="/about/#comments" rel="noopener noreferrer"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.3/social/942ebbf1a4b91.svg"/></a></div></footer>
+
+    </aside>
+    <div class='l_main'>
+      
+
+      
+
+<div class="bread-nav fs12"><div id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a><span class="sep"></span><a class="cap breadcrumb" href="/">文章</a><span class="sep"></span><a class="cap breadcrumb-link" href="/categories/AI/">AI</a> <span class="sep"></span> <a class="cap breadcrumb-link" href="/categories/AI/%E5%A4%A7%E6%A8%A1%E5%9E%8B/">大模型</a></div><div id="post-meta">发布于&nbsp;<time datetime="2024-11-20T11:12:11.000Z">2024-11-20</time></div></div>
+
+<article class='content md post'>
+<h1 class="article-title"><span>大模型结构化输出</span></h1>
+<h2 id="结构化输出"><a href="#结构化输出" class="headerlink" title="结构化输出"></a>结构化输出</h2><p>结构化输出（Structured Outputs）是指让 LLM 输出符合机器可解析的格式，这对于构建 AI 应用至关重要。</p>
+<h3 id="技术路径"><a href="#技术路径" class="headerlink" title="技术路径"></a>技术路径</h3><h4 id="JSON-mode"><a href="#JSON-mode" class="headerlink" title="JSON mode"></a>JSON mode</h4><p>JSON Mode 是大模型生成结构化输出的一种方式，通过特定的提示（Prompt Engineering）让大模型输出符合 JSON 格式的数据。<br><strong>关键点：</strong></p>
+<ol>
+<li>结构化输出：JSON Mode 确保大模型的输出是结构化的，符合 JSON 格式，便于程序解析和处理。</li>
+<li>提示工程：通过特定的提示词或指令，引导大模型生成 JSON 格式的输出。</li>
+<li>应用场景：适用于需要将大模型的输出与其他系统或 API 集成的场景，如数据提取、自动化任务等。<h6 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h6><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">=====用户输入prompt=====</span><br><span class="line">请生成一个包含用户信息的 JSON 对象，要求包含姓名、年龄、邮箱和活跃状态。</span><br><span class="line"></span><br><span class="line">=====GPT回复=====</span><br><span class="line">&#123;</span><br><span class="line">  &quot;name&quot;: &quot;张三&quot;,</span><br><span class="line">  &quot;age&quot;: 25,</span><br><span class="line">  &quot;email&quot;: &quot;zhangsan@example.com&quot;,</span><br><span class="line">  &quot;isActive&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="函数调用（Function-Calling）"><a href="#函数调用（Function-Calling）" class="headerlink" title="函数调用（Function Calling）"></a>函数调用（Function Calling）</h4></li>
+</ol>
+<p>通过函数调用将大模型与业务逻辑连接起来，实现更复杂的交互。</p>
+<h5 id="1-接口定义"><a href="#1-接口定义" class="headerlink" title="1. 接口定义"></a>1. 接口定义</h5><p>通过定义函数接口，包括：</p>
+<ul>
+<li>函数名</li>
+<li>功能描述</li>
+<li>参数说明</li>
+</ul>
+<h5 id="2-调用流程"><a href="#2-调用流程" class="headerlink" title="2. 调用流程"></a>2. 调用流程</h5><ol>
+<li>大模型解析用户输入</li>
+<li>决定是否调用 API</li>
+<li>生成调用参数</li>
+<li>执行 API 调用</li>
+<li>将结果整合到回答中</li>
+</ol>
+<h5 id="3-示例代码"><a href="#3-示例代码" class="headerlink" title="3. 示例代码"></a>3. 示例代码</h5><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">=====用户输入prompt=====</span><br><span class="line">我想在南京路步行街附近喝奶茶，给我推荐几个.</span><br><span class="line"></span><br><span class="line">=====GPT回复=====</span><br><span class="line">在南京路步行街附近，你可以尝试以下几家奶茶店：       </span><br><span class="line"></span><br><span class="line"><span class="bullet">1.</span> <span class="strong">**桂源铺**</span></span><br><span class="line"><span class="bullet">   -</span> 地址：南京东路789号上海世茂广场L2层</span><br><span class="line"><span class="bullet">   -</span> 距离：约170米</span><br><span class="line"></span><br><span class="line"><span class="bullet">2.</span> <span class="strong">**茶百道(天津路店)**</span></span><br><span class="line"><span class="bullet">   -</span> 地址：天津路494号(人民广场地铁站19号口步行470米)</span><br><span class="line"><span class="bullet">   -</span> 距离：约193米</span><br><span class="line"></span><br><span class="line"><span class="bullet">3.</span> <span class="strong">**茉御贡茶(中福城店)**</span></span><br><span class="line"><span class="bullet">   -</span> 地址：湖北路199弄中福城一期</span><br><span class="line"><span class="bullet">   -</span> 距离：约227米</span><br><span class="line"></span><br><span class="line">希望你能找到喜欢的奶茶店！</span><br><span class="line"></span><br><span class="line">=====对话历史=====</span><br><span class="line">[</span><br><span class="line">  &#123; role: &#x27;system&#x27;, content: &#x27;你是一个地图通，你可以找到任何地址。&#x27; &#125;,</span><br><span class="line">  &#123; role: &#x27;user&#x27;, content: &#x27;我想在南京路步行街附近喝奶茶，给我推荐几个&#x27; &#125;,</span><br><span class="line">  &#123;</span><br><span class="line"><span class="code">    content: null,</span></span><br><span class="line"><span class="code">    refusal: null,</span></span><br><span class="line"><span class="code">    role: &#x27;assistant&#x27;,</span></span><br><span class="line"><span class="code">    tool_calls: [</span></span><br><span class="line"><span class="code">      &#123;</span></span><br><span class="line"><span class="code">        function: &#123;</span></span><br><span class="line"><span class="code">          arguments: &#x27;&#123;&quot;city&quot;:&quot;上海&quot;,&quot;location&quot;:&quot;南京路步行街&quot;&#125;&#x27;,</span></span><br><span class="line"><span class="code">          name: &#x27;get_location_coordinate&#x27;</span></span><br><span class="line"><span class="code">        &#125;,</span></span><br><span class="line"><span class="code">        id: &#x27;call_6zjMJUSybarLtYOGroifwSZ3&#x27;,</span></span><br><span class="line"><span class="code">        type: &#x27;function&#x27;</span></span><br><span class="line"><span class="code">      &#125;</span></span><br><span class="line"><span class="code">    ]</span></span><br><span class="line"><span class="code">  &#125;,</span></span><br><span class="line"><span class="code">  &#123;</span></span><br><span class="line"><span class="code">    tool_call_id: &#x27;call_6zjMJUSybarLtYOGroifwSZ3&#x27;,</span></span><br><span class="line"><span class="code">    role: &#x27;tool&#x27;,</span></span><br><span class="line"><span class="code">    name: &#x27;get_location_coordinate&#x27;,</span></span><br><span class="line"><span class="code">    content: &#x27;&#123;\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;parent&quot;: &quot;&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;address&quot;: &quot;南京东路558号&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;distance&quot;: &quot;&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;pcode&quot;: &quot;310000&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;adcode&quot;: &quot;310101&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;pname&quot;: &quot;上海市&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;cityname&quot;: &quot;上海市&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;type&quot;: &quot;购物服务;购物相关场所;购物相关场所&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;typecode&quot;: &quot;060000&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;adname&quot;: &quot;黄浦区&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;citycode&quot;: &quot;021&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;name&quot;: &quot;南京路步行街&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;location&quot;: &quot;121.479494,31.235983&quot;,\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;  &quot;id&quot;: &quot;B0FFF5VNSV&quot;\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;&#125;&#x27;</span></span><br><span class="line"><span class="code">  &#125;,</span></span><br><span class="line"><span class="code">  &#123;</span></span><br><span class="line"><span class="code">    content: null,</span></span><br><span class="line"><span class="code">    refusal: null,</span></span><br><span class="line"><span class="code">    role: &#x27;assistant&#x27;,</span></span><br><span class="line"><span class="code">    tool_calls: [</span></span><br><span class="line"><span class="code">      &#123;</span></span><br><span class="line"><span class="code">        function: &#123;</span></span><br><span class="line"><span class="code">          arguments: &#x27;&#123;&quot;keyword&quot;:&quot;奶茶&quot;,&quot;latitude&quot;:&quot;31.235983&quot;,&quot;longitude&quot;:&quot;121.479494&quot;&#125;&#x27;,</span></span><br><span class="line"><span class="code">          name: &#x27;search_nearby_pois&#x27;</span></span><br><span class="line"><span class="code">        &#125;,</span></span><br><span class="line"><span class="code">        id: &#x27;call_GDro5aYlfjrdGAg5SEOx8vcR&#x27;,</span></span><br><span class="line"><span class="code">        type: &#x27;function&#x27;</span></span><br><span class="line"><span class="code">      &#125;</span></span><br><span class="line"><span class="code">    ]</span></span><br><span class="line"><span class="code">  &#125;,</span></span><br><span class="line"><span class="code">  &#123;</span></span><br><span class="line"><span class="code">    tool_call_id: &#x27;call_GDro5aYlfjrdGAg5SEOx8vcR&#x27;,</span></span><br><span class="line"><span class="code">    role: &#x27;tool&#x27;,</span></span><br><span class="line"><span class="code">    name: &#x27;search_nearby_pois&#x27;,</span></span><br><span class="line"><span class="code">    content: &#x27;&quot;桂源铺\\n南京东路789号上海世茂广场L2层\\n距离: 170米\\n\\n茶百道(天津路店)\\n天津路494号(人民广场 </span></span><br><span class="line"><span class="code">地铁站19号口步行470米)\\n距离: 193米\\n\\n茉御贡茶(中福城店)\\n湖北路199弄中福城一期\\n距离: 227米\\n\\n&quot;&#x27;       </span></span><br><span class="line"><span class="code">  &#125;,</span></span><br><span class="line"><span class="code">  &#123;</span></span><br><span class="line"><span class="code">    content: &#x27;在南京路步行街附近，你可以尝试以下几家奶茶店：\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;1. **桂源铺**\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;   - 地址：南京东路789号上海世茂广场L2层\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;   - 距离：约170米\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;2. **茶百道(天津路店)**\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;   - 地址：天津路494号(人民广场地铁站19号口步行470米)\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;   - 距离：约193米\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;3. **茉御贡茶(中福城店)**\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;   - 地址：湖北路199弄中福城一期\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;   - 距离：约227米\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;\n&#x27; +</span></span><br><span class="line"><span class="code">      &#x27;希望你能找到喜欢的奶茶店！&#x27;,</span></span><br><span class="line"><span class="code">    refusal: null,</span></span><br><span class="line"><span class="code">    role: &#x27;assistant&#x27;</span></span><br><span class="line"><span class="code">  &#125;</span></span><br><span class="line"><span class="code">]</span></span><br></pre></td></tr></table></figure>
+<p><strong>具体代码：</strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> prompt = <span class="string">&#x27;我想在南京路步行街附近喝奶茶，给我推荐几个&#x27;</span></span><br><span class="line"><span class="keyword">const</span> messages = [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">role</span>: <span class="string">&#x27;system&#x27;</span>,</span><br><span class="line">    <span class="attr">content</span>: <span class="string">&#x27;你是一个地图通，你可以找到任何地址。&#x27;</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="attr">role</span>: <span class="string">&#x27;user&#x27;</span>,</span><br><span class="line">    <span class="attr">content</span>: prompt,</span><br><span class="line">  &#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">get_location_coordinate</span>(<span class="params">location, city</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> url = <span class="string">`<span class="subst">$&#123;amap_base_url&#125;</span>/place/text?key=<span class="subst">$&#123;amap_key&#125;</span>&amp;keywords=<span class="subst">$&#123;location&#125;</span>&amp;region=<span class="subst">$&#123;city&#125;</span>`</span></span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url)</span><br><span class="line">  <span class="keyword">const</span> result = <span class="keyword">await</span> response.<span class="title function_">json</span>()</span><br><span class="line">  <span class="keyword">return</span> result?.<span class="property">pois</span> ? result?.<span class="property">pois</span>[<span class="number">0</span>] : <span class="literal">null</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">search_nearby_pois</span>(<span class="params">longitude, latitude, keyword</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> ans = <span class="string">&#x27;&#x27;</span></span><br><span class="line">  <span class="keyword">const</span> url = <span class="string">`<span class="subst">$&#123;amap_base_url&#125;</span>/place/around?key=<span class="subst">$&#123;amap_key&#125;</span>&amp;keywords=<span class="subst">$&#123;keyword&#125;</span>&amp;location=<span class="subst">$&#123;longitude&#125;</span>,<span class="subst">$&#123;latitude&#125;</span>`</span></span><br><span class="line">  <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(url)</span><br><span class="line">  <span class="keyword">const</span> result = <span class="keyword">await</span> response.<span class="title function_">json</span>()</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">dir</span>(result)</span><br><span class="line">  <span class="keyword">if</span> (result &amp;&amp; result.<span class="property">pois</span> &amp;&amp; <span class="title class_">Array</span>.<span class="title function_">isArray</span>(result.<span class="property">pois</span>)) &#123;</span><br><span class="line">    <span class="keyword">const</span> poisLength = <span class="title class_">Math</span>.<span class="title function_">min</span>(<span class="number">3</span>, result.<span class="property">pois</span>.<span class="property">length</span>)</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; poisLength; i++) &#123;</span><br><span class="line">      <span class="keyword">const</span> poi = result.<span class="property">pois</span>[i]</span><br><span class="line">      <span class="keyword">const</span> name = poi.<span class="property">name</span></span><br><span class="line">      <span class="keyword">const</span> address = poi.<span class="property">address</span></span><br><span class="line">      <span class="keyword">const</span> distance = poi.<span class="property">distance</span></span><br><span class="line">      ans += <span class="string">`<span class="subst">$&#123;name&#125;</span>\n<span class="subst">$&#123;address&#125;</span>\n距离: <span class="subst">$&#123;distance&#125;</span>米\n\n`</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">handleToolCalls</span>(<span class="params">tool_calls</span>) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> tool_call <span class="keyword">of</span> tool_calls) &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="title function_">handleToolCall</span>(tool_call) <span class="comment">// 确保逐个处理每个工具调用</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">handleToolCall</span>(<span class="params">tool_call</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> args = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(tool_call?.<span class="property">function</span>.<span class="property">arguments</span>)</span><br><span class="line">  <span class="keyword">let</span> call_result</span><br><span class="line">  <span class="keyword">if</span> (tool_call?.<span class="property">function</span>.<span class="property">name</span> === <span class="string">&#x27;get_location_coordinate&#x27;</span>) &#123;</span><br><span class="line">    call_result = <span class="keyword">await</span> <span class="title function_">get_location_coordinate</span>(args.<span class="property">location</span>, args.<span class="property">city</span>)</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (tool_call?.<span class="property">function</span>.<span class="property">name</span> === <span class="string">&#x27;search_nearby_pois&#x27;</span>) &#123;</span><br><span class="line">    call_result = <span class="keyword">await</span> <span class="title function_">search_nearby_pois</span>(</span><br><span class="line">      args.<span class="property">longitude</span>,</span><br><span class="line">      args.<span class="property">latitude</span>,</span><br><span class="line">      args.<span class="property">keyword</span></span><br><span class="line">    )</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将结果转换为字符串，以便正确显示</span></span><br><span class="line">  <span class="keyword">const</span> resultString = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(call_result, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">  <span class="comment">// 将结果加入到对话历史中</span></span><br><span class="line">  messages.<span class="title function_">push</span>(&#123;</span><br><span class="line">    <span class="attr">tool_call_id</span>: tool_call.<span class="property">id</span>,</span><br><span class="line">    <span class="attr">role</span>: <span class="string">&#x27;tool&#x27;</span>,</span><br><span class="line">    <span class="attr">name</span>: tool_call?.<span class="property">function</span>.<span class="property">name</span>,</span><br><span class="line">    <span class="attr">content</span>: resultString,</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">await</span> <span class="title function_">callGPT</span>(messages)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">callGPT</span>(<span class="params">messages, model = <span class="string">&#x27;gpt-4o&#x27;</span></span>) &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> completion = <span class="keyword">await</span> openai.<span class="property">chat</span>.<span class="property">completions</span>.<span class="title function_">create</span>(&#123;</span><br><span class="line">      messages,</span><br><span class="line">      model,</span><br><span class="line">      <span class="attr">temperature</span>: <span class="number">0</span>,</span><br><span class="line">      <span class="attr">seed</span>: <span class="number">1024</span>, <span class="comment">// 随机种子不变，temperature 和 prompt 不变的情况下 每次都返回相同的结果</span></span><br><span class="line">      <span class="attr">tool_choice</span>: <span class="string">&#x27;auto&#x27;</span>, <span class="comment">// 大模型自主判断是否调用function calling</span></span><br><span class="line">      <span class="attr">tools</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;function&#x27;</span>,</span><br><span class="line">          <span class="attr">function</span>: &#123;</span><br><span class="line">            <span class="attr">name</span>: <span class="string">&#x27;get_location_coordinate&#x27;</span>,</span><br><span class="line">            <span class="attr">description</span>: <span class="string">&#x27;根据POI名称，获得POI的经纬度坐标&#x27;</span>,</span><br><span class="line">            <span class="attr">parameters</span>: &#123;</span><br><span class="line">              <span class="attr">type</span>: <span class="string">&#x27;object&#x27;</span>,</span><br><span class="line">              <span class="attr">properties</span>: &#123;</span><br><span class="line">                <span class="attr">location</span>: &#123;</span><br><span class="line">                  <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>,</span><br><span class="line">                  <span class="attr">description</span>: <span class="string">&#x27;POI名称, 必须是中文&#x27;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">city</span>: &#123;</span><br><span class="line">                  <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>,</span><br><span class="line">                  <span class="attr">description</span>: <span class="string">&#x27;POI所在的城市名称, 必须是中文&#x27;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">              &#125;,</span><br><span class="line">              <span class="attr">required</span>: [<span class="string">&#x27;location&#x27;</span>, <span class="string">&#x27;city&#x27;</span>],</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">type</span>: <span class="string">&#x27;function&#x27;</span>,</span><br><span class="line">          <span class="attr">function</span>: &#123;</span><br><span class="line">            <span class="attr">name</span>: <span class="string">&#x27;search_nearby_pois&#x27;</span>,</span><br><span class="line">            <span class="attr">description</span>: <span class="string">&#x27;搜索给定坐标附近的poi&#x27;</span>,</span><br><span class="line">            <span class="attr">parameters</span>: &#123;</span><br><span class="line">              <span class="attr">type</span>: <span class="string">&#x27;object&#x27;</span>,</span><br><span class="line">              <span class="attr">properties</span>: &#123;</span><br><span class="line">                <span class="attr">latitude</span>: &#123;</span><br><span class="line">                  <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>,</span><br><span class="line">                  <span class="attr">description</span>: <span class="string">&#x27;中心点的纬度&#x27;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">longitude</span>: &#123;</span><br><span class="line">                  <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>,</span><br><span class="line">                  <span class="attr">description</span>: <span class="string">&#x27;中心点的经度&#x27;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">keyword</span>: &#123;</span><br><span class="line">                  <span class="attr">type</span>: <span class="string">&#x27;string&#x27;</span>,</span><br><span class="line">                  <span class="attr">description</span>: <span class="string">&#x27;目标poi的关键字&#x27;</span>,</span><br><span class="line">                &#125;,</span><br><span class="line">              &#125;,</span><br><span class="line">              <span class="attr">required</span>: [<span class="string">&#x27;latitude&#x27;</span>, <span class="string">&#x27;longitude&#x27;</span>, <span class="string">&#x27;keyword&#x27;</span>],</span><br><span class="line">            &#125;,</span><br><span class="line">          &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">      ],</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">const</span> result = completion?.<span class="property">choices</span>[<span class="number">0</span>]?.<span class="property">message</span></span><br><span class="line">    messages.<span class="title function_">push</span>(result)</span><br><span class="line">    <span class="keyword">if</span> (result.<span class="property">tool_calls</span> &amp;&amp; result.<span class="property">tool_calls</span>?.<span class="property">length</span>) &#123;</span><br><span class="line">      <span class="keyword">await</span> <span class="title function_">handleToolCalls</span>(result.<span class="property">tool_calls</span>)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;=====GPT回复=====&#x27;</span>)</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(result.<span class="property">content</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(</span><br><span class="line">      <span class="string">&#x27;调用GPT API时出错:&#x27;</span>,</span><br><span class="line">      error.<span class="property">response</span> ? error.<span class="property">response</span>.<span class="property">data</span> : error.<span class="property">messages</span></span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">throw</span> error</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">callGPT</span>(messages).<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;=====对话历史=====&#x27;</span>)</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">dir</span>(messages, &#123; <span class="attr">depth</span>: <span class="literal">null</span>, <span class="attr">colors</span>: <span class="literal">true</span> &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h4 id="JSON-Schema"><a href="#JSON-Schema" class="headerlink" title="JSON Schema"></a>JSON Schema</h4><p>JSON Schema 是一种用于描述 JSON 数据结构的标准，可以帮助大模型生成符合特定格式的输出。通过定义 JSON Schema，可以确保大模型的输出满足业务需求，便于后续处理。</p>
+<h5 id="示例：使用-JSON-Schema-格式化大模型的输出"><a href="#示例：使用-JSON-Schema-格式化大模型的输出" class="headerlink" title="示例：使用 JSON Schema 格式化大模型的输出"></a>示例：使用 JSON Schema 格式化大模型的输出</h5><h6 id="1-JSON-Schema-的基本结构"><a href="#1-JSON-Schema-的基本结构" class="headerlink" title="1. JSON Schema 的基本结构"></a>1. JSON Schema 的基本结构</h6><p>JSON Schema 是一个 JSON 对象，用于描述另一个 JSON 对象的结构。它通常包含以下关键字段：</p>
+<ul>
+<li>type: 指定数据类型，如 object、string、number、boolean 等。</li>
+<li>properties: 定义对象的属性及其类型。</li>
+<li>required: 指定哪些属性是必需的。</li>
+</ul>
+<h6 id="2-定义-JSON-Schema"><a href="#2-定义-JSON-Schema" class="headerlink" title="2. 定义 JSON Schema"></a>2. 定义 JSON Schema</h6><p>假设我们希望大模型输出一个包含用户信息的 JSON 对象，具体结构如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="string">&quot;number&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;isActive&quot;</span><span class="punctuation">:</span> <span class="string">&quot;boolean&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>我们可以通过 JSON Schema 来定义这个结构，并在 Prompt 中明确要求大模型按照该 Schema 输出。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;object&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;properties&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;用户的全名&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;number&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;用户的年龄&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;用户的电子邮件地址&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;isActive&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;boolean&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;description&quot;</span><span class="punctuation">:</span> <span class="string">&quot;用户是否处于活跃状态&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;required&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;name&quot;</span><span class="punctuation">,</span> <span class="string">&quot;age&quot;</span><span class="punctuation">,</span> <span class="string">&quot;email&quot;</span><span class="punctuation">,</span> <span class="string">&quot;isActive&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h6 id="3-在-Prompt-中使用-JSON-Schema"><a href="#3-在-Prompt-中使用-JSON-Schema" class="headerlink" title="3. 在 Prompt 中使用 JSON Schema"></a>3. 在 Prompt 中使用 JSON Schema</h6><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">请生成一个用户信息的 JSON 对象，要求符合以下 JSON Schema：</span><br><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;object&quot;,</span><br><span class="line">  &quot;properties&quot;: &#123;</span><br><span class="line"><span class="code">    &quot;name&quot;: &#123;</span></span><br><span class="line"><span class="code">      &quot;type&quot;: &quot;string&quot;,</span></span><br><span class="line"><span class="code">      &quot;description&quot;: &quot;用户的全名&quot;</span></span><br><span class="line"><span class="code">    &#125;,</span></span><br><span class="line"><span class="code">    &quot;age&quot;: &#123;</span></span><br><span class="line"><span class="code">      &quot;type&quot;: &quot;number&quot;,</span></span><br><span class="line"><span class="code">      &quot;description&quot;: &quot;用户的年龄&quot;</span></span><br><span class="line"><span class="code">    &#125;,</span></span><br><span class="line"><span class="code">    &quot;email&quot;: &#123;</span></span><br><span class="line"><span class="code">      &quot;type&quot;: &quot;string&quot;,</span></span><br><span class="line"><span class="code">      &quot;description&quot;: &quot;用户的电子邮件地址&quot;</span></span><br><span class="line"><span class="code">    &#125;,</span></span><br><span class="line"><span class="code">    &quot;isActive&quot;: &#123;</span></span><br><span class="line"><span class="code">      &quot;type&quot;: &quot;boolean&quot;,</span></span><br><span class="line"><span class="code">      &quot;description&quot;: &quot;用户是否处于活跃状态&quot;</span></span><br><span class="line"><span class="code">    &#125;</span></span><br><span class="line"><span class="code">  &#125;,</span></span><br><span class="line"><span class="code">  &quot;required&quot;: [&quot;name&quot;, &quot;age&quot;, &quot;email&quot;, &quot;isActive&quot;]</span></span><br><span class="line"><span class="code">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>请确保输出的 JSON 对象完全符合上述 Schema</p>
+<h6 id="4-大模型的输出示例"><a href="#4-大模型的输出示例" class="headerlink" title="4. 大模型的输出示例"></a>4. 大模型的输出示例</h6><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;张三&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">25</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;zhangsan@example.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;isActive&quot;</span><span class="punctuation">:</span> <span class="keyword">true</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<div class="article-footer reveal fs14"><section id="license"><div class="header"><span>许可协议</span></div><div class="body"><p>本文采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">署名-非商业性使用-相同方式共享 4.0 国际</a> 许可协议，转载请注明出处。</p>
+</div></section><section id="share"><div class="header"><span>分享文章</span></div><div class="body"><div class="link"><input class="copy-area" readonly="true" id="copy-link" value="https://blog.kenym.cn/2024/11/20/%E5%A4%A7%E6%A8%A1%E5%9E%8B02_function_calling/" /></div><div class="social-wrap dis-select"><a class="social share-item wechat" onclick="util.toggle(&quot;qrcode-wechat&quot)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/b32ef3da1162a.svg"/></a><a class="social share-item weibo" target="_blank" rel="external nofollow noopener noreferrer" href="https://service.weibo.com/share/share.php?url=https://blog.kenym.cn/2024/11/20/%E5%A4%A7%E6%A8%A1%E5%9E%8B02_function_calling/&title=大模型结构化输出 - Captain&summary=结构化输出结构化输出（Structured Outputs）是指让 LLM 输出符合机器可解析的格式，这对于构建 AI 应用至关重要。
+技术路径JSON modeJSON Mode 是大模型生成结构化输出的一种方式，通过特定的提示（P..."><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/80c07e4dbb303.svg"/></a><a class="social share-item email" href="mailto:?subject=大模型结构化输出 - Captain&amp;body=https://blog.kenym.cn/2024/11/20/%E5%A4%A7%E6%A8%A1%E5%9E%8B02_function_calling/"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/a1b00e20f425d.svg"/></a><a class="social share-item link" onclick="util.copy(&quot;copy-link&quot;, &quot;复制成功&quot;)"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://cdn.jsdelivr.net/gh/cdn-x/placeholder@1.0.1/social/8411ed322ced6.svg"/></a></div><div class="qrcode" id="qrcode-wechat" style="visibility:hidden;height:0"><img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=https://blog.kenym.cn/2024/11/20/%E5%A4%A7%E6%A8%A1%E5%9E%8B02_function_calling/index.html"/></div></div></section></div>
+
+</article>
+
+<div class="related-wrap reveal" id="read-next"><section class="header cap theme"><span>接下来阅读</span></section><section class="body fs14"><a id="next" href="/2024/09/02/%E5%A4%A7%E6%A8%A1%E5%9E%8B01_%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84/">大模型应用技术架构<span class="note">较早</span></a><div class="line"></div></section></div>
+
+
+
+
+
+
+  <div class='related-wrap md reveal' id="comments">
+    <div class='cmt-title cap theme'>
+      快来参与讨论吧
+    </div>
+    <div class='cmt-body beaudar'>
+      
+
+<svg class="loading" style="vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2709"><path d="M832 512c0-176-144-320-320-320V128c211.2 0 384 172.8 384 384h-64zM192 512c0 176 144 320 320 320v64C300.8 896 128 723.2 128 512h64z" p-id="2710"></path></svg>
+
+<div id="beaudar" repo="jinxb/blog-comments" issue-term="pathname" theme="preferred-color-scheme" input-position="top" comment-order="desc" loading="false" branch="main"></div>
+
+    </div>
+  </div>
+
+
+
+      
+<footer class="page-footer reveal fs12"><hr><div class="sitemap"><div class="sitemap-group"><span class="fs14">博客主页</span><a href="/">主页</a></div><div class="sitemap-group"><span class="fs14">博客</span><a href="/">近期发布</a><a href="/categories/">分类</a><a href="/tags/">标签</a><a href="/archives/">归档</a></div><div class="sitemap-group"><span class="fs14">Wiki</span><a href="/wiki/">开源项目</a></div><div class="sitemap-group"><span class="fs14">联系</span><a href="/about/">关于我</a><a target="_blank" rel="noopener" href="https://github.com/jinxb">GitHub</a></div></div><div class="text"><p>本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</p>
+<p>本站由 <a href="https://blog.kenym.cn/">@Jinxb</a> 创建，使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.7.0" title="v1.7.0">Stellar</a> 作为主题。</p>
+Copyright <i class="far fa-copyright"></i> 2019-2022 丨 <img class="lazy" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGdBTUEAALGPC/xhBQAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAAaADAAQAAAABAAAAAQAAAADa6r/EAAAAC0lEQVQIHWNgAAIAAAUAAY27m/MAAAAASUVORK5CYII=" data-src="https://www.kenym.cn/blog-resource/img/icp.png" style="margin-bottom:5px;vertical-align: middle;">  <a href="https://beian.miit.gov.cn" target="_blank">  鄂ICP备2022006222号  </a> 丨 <span id="timeDate">6 </span><span id="times"></span></div></footer>
+
+      <div class='float-panel mobile-only blur' style='display:none'>
+  <button type='button' class='sidebar-toggle mobile' onclick='sidebar.toggle()'>
+    <svg class="icon" style="width: 1em; height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="15301"><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 2.3 26.8 24.6 47.5 51.6 47.6h416.5v4z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15302"></path><path d="M566.407 808.3c26.9-0.1 49.3-20.8 51.6-47.6-1.9-27.7-23.9-49.7-51.6-51.6h-412.6c-28.2-1.4-52.6 19.5-55.5 47.6 1.9 27.7 23.9 49.7 51.6 51.6h416.5z m309.3-249.9c26.9-0.1 49.3-20.8 51.6-47.6-2.2-26.8-24.6-47.5-51.6-47.6h-721.9c-27.7-2.8-52.5 17.4-55.3 45.1-0.1 0.8-0.1 1.7-0.2 2.5 0.9 27.2 23.6 48.5 50.7 47.6H875.707z m-103.1-245.9c26.9-0.1 49.3-20.8 51.6-47.6-0.4-28.3-23.2-51.1-51.5-51.6h-618.9c-29.5-1.1-54.3 21.9-55.5 51.4v0.2c1.4 27.8 25.2 49.2 53 47.8 0.8 0 1.7-0.1 2.5-0.2h618.8z" p-id="15303"></path></svg>
+  </button>
+</div>
+
+    </div>
+  </div>
+  <div class='scripts'>
+    <script type="text/javascript">
+  stellar = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    loadCSS: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    // 从 butterfly 和 volantis 获得灵感
+    loadScript: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    // https://github.com/jerryc127/hexo-theme-butterfly
+    jQuery: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        stellar.loadScript(stellar.plugins.jQuery).then(fn)
+      } else {
+        fn()
+      }
+    }
+  };
+  stellar.github = 'https://github.com/xaoxuu/hexo-theme-stellar/tree/1.7.0';
+  stellar.config = {
+    date_suffix: {
+      just: '刚刚',
+      min: '分钟前',
+      hour: '小时前',
+      day: '天前',
+      month: '个月前',
+    },
+  };
+
+  // required plugins (only load if needs)
+  stellar.plugins = {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+    sitesjs: '/js/plugins/sites.js',
+    friendsjs: '/js/plugins/friends.js',
+  };
+
+  // optional plugins
+  if ('true' == 'true') {
+    stellar.plugins.lazyload = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/vanilla-lazyload@17.3.1/dist/lazyload.min.js","transition":"blur"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.swiper = Object.assign({"enable":true,"css":"https://unpkg.com/swiper@6/swiper-bundle.min.css","js":"https://unpkg.com/swiper@6/swiper-bundle.min.js"});
+  }
+  if ('' == 'true') {
+    stellar.plugins.scrollreveal = Object.assign({"enable":null,"js":"https://cdn.jsdelivr.net/npm/scrollreveal@4.0.9/dist/scrollreveal.min.js","distance":"8px","duration":500,"interval":100,"scale":1});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.preload = Object.assign({"enable":true,"service":"flying_pages","instant_page":"https://cdn.jsdelivr.net/gh/volantis-x/cdn-volantis@4.1.2/js/instant_page.js","flying_pages":"https://cdn.jsdelivr.net/gh/gijo-varghese/flying-pages@2.1.2/flying-pages.min.js"});
+  }
+  if ('true' == 'true') {
+    stellar.plugins.fancybox = Object.assign({"enable":true,"js":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js","css":"https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css","selector":".swiper-slide img"});
+  }
+  if ('false' == 'true') {
+    stellar.plugins.heti = Object.assign({"enable":false,"css":"https://unpkg.com/heti/umd/heti.min.css","js":"https://unpkg.com/heti/umd/heti-addon.min.js"});
+  }
+</script>
+
+<!-- required -->
+
+  
+<script src="/js/main.js" async></script>
+
+
+
+<!-- optional -->
+
+  <script>
+  function loadBeaudar() {
+    const els = document.querySelectorAll("#comments #beaudar");
+    if (els.length === 0) return;
+    els.forEach((el, i) => {
+      try {
+        el.innerHTML = '';
+      } catch (error) {
+        console.log(error);
+      }
+      var script = document.createElement('script');
+      script.src = 'https://beaudar.lipk.org/client.js';
+      script.async = true;
+      for (let key of Object.keys(el.attributes)) {
+        let attr = el.attributes[key];
+        if (['class', 'id'].includes(attr.name) === false) {
+          script.setAttribute(attr.name, attr.value);
+        }
+      }
+      el.appendChild(script);
+    });
+  }
+  window.addEventListener('DOMContentLoaded', (event) => {
+      loadBeaudar();
+  });
+</script>
+
+
+
+
+<!-- inject -->
+
+
+  </div>
+  <!-- Chatra {literal} -->
+  <script>
+    (function(d, w, c) {
+        w.ChatraID = 'JwbPDuoaf3XEPfh8Y';
+        var s = d.createElement('script');
+        w[c] = w[c] || function() {
+            (w[c].q = w[c].q || []).push(arguments);
+        };
+        s.async = true;
+        s.src = 'https://call.chatra.io/chatra.js';
+        if (d.head) d.head.appendChild(s);
+    })(document, window, 'Chatra');
+  </script>
+  <!-- /Chatra {/literal} -->
+</body>
+</html>
